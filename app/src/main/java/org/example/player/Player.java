@@ -32,11 +32,13 @@ public class Player {
 
   public void movePlayer(int displayWidth, int displayHeight) {
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_W)) { 
-      playerPositionY += 1;
+      playerPositionY += playerDeltaY*0.22;
+      playerPositionX += playerDeltaX*0.22;
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_S)) { 
-      playerPositionY -= 0.8;
+      playerPositionY -= playerDeltaY*0.2;
+      playerPositionX -= playerDeltaX*0.2;
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_D)) { 
