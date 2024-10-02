@@ -6,11 +6,14 @@ import org.example.renderEngine.Inputs;
 import org.lwjgl.glfw.GLFW;
 
 public class Player {
-  private float playerPositionX, playerPositionY; 
+  private float playerMouseX= (float) Inputs.getMouseX(), playerDeltaX, playerDeltaY, playerAngle, playerPositionX, playerPositionY; 
 
   public Player(int posX, int posY) {
     this.playerPositionX = posX;
     this.playerPositionY = posY;
+    this.playerDeltaX = (float) Math.cos(playerAngle)*5; 
+    this.playerDeltaY = (float) Math.sin(playerAngle)*5; 
+    this.playerAngle = playerAngle; 
   }
 
   public void drawPlayer() {
@@ -19,29 +22,69 @@ public class Player {
     glBegin(GL_POINTS);
     glVertex2f(playerPositionX, playerPositionY);
     glEnd();
+
+    glLineWidth(3);
+    glBegin(GL_LINES);
+    glVertex2f(playerPositionX, playerPositionY);
+    glVertex2f(playerPositionX+playerDeltaX*5, playerPositionY+playerDeltaY*5);
+    glEnd();
   }
 
   public void movePlayer(int displayWidth, int displayHeight) {
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_W)) { 
-      playerPositionY += 2.5;
+      playerPositionY += playerDeltaY*0.22;
+      playerPositionX += playerDeltaX*0.22;
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_S)) { 
-      playerPositionY -= 2.5;
+      playerPositionY -= playerDeltaY*0.2;
+      playerPositionX -= playerDeltaX*0.2;
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_D)) { 
-      playerPositionX += 2.5;
+      playerPositionX += 0.6;
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_A)) { 
-      playerPositionX -= 2.5;
+      playerPositionX -= 0.6;
     }
 
     playerPositionX = Math.max(0, Math.min(playerPositionX, displayWidth)); 
     playerPositionY = Math.max(0, Math.min(playerPositionY, displayHeight));
+
+    if (Inputs.getCursorMoved()) {
+      if(Inputs.getMouseX() < playerMouseX) {
+        playerAngle -= 0.05;
+        if (playerAngle < 0) {
+          playerAngle += 2 * Math.PI;
+        }
+        playerDeltaX = (float) (Math.cos(playerAngle)*5);
+        playerDeltaY = (float) (Math.sin(playerAngle)*5);
+
+        playerMouseX = (float) Inputs.getMouseX();
+        System.out.println("pda=" + playerAngle);
+      }
+
+      if(Inputs.getMouseX() > playerMouseX) {
+        playerAngle += 0.05;
+        if (playerAngle > 2*Math.PI) {
+          playerAngle -= 2 * Math.PI;
+        }
+        playerDeltaX = (float) (Math.cos(playerAngle)*5);
+        playerDeltaY = (float) (Math.sin(playerAngle)*5);
+
+        playerMouseX = (float) Inputs.getMouseX();
+        System.out.println("pda=" + playerAngle);
+      }
+    }
+
   }
 
-
-
+    public void check() {
+    if (Inputs.getCursorMoved()) {
+      System.out.println(Inputs.getMouseX());
+    }
+    Inputs.setCursorMoved(false);
+  }
+      
 }

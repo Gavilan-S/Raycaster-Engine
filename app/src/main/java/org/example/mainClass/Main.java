@@ -59,6 +59,7 @@ public class Main implements Runnable {
     map.drawMap2d();
     player.drawPlayer();
     player.movePlayer(WIDTH, HEIGHT);
+    player.check();
     display.swapBuffers(); 
   }
 

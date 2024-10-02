@@ -10,10 +10,13 @@ public class Inputs {
   private static boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];
   private static double mouseX, mouseY;
   private static boolean[] buttons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
+  private static boolean cursorMoved = false;
+  private double mouseLastX = -1;
+  private double mouseCurrentX;
 
   // start the input callbacks
   private GLFWKeyCallback keyboard;
-  private GLFWCursorPosCallback mouseMove;
+  private static GLFWCursorPosCallback mouseMove;
   private GLFWMouseButtonCallback mouseButtons;
 
   // method to know if player used keyboard, mouse or mouseButtons 
@@ -29,6 +32,14 @@ public class Inputs {
       public void invoke(long window, double xpos, double ypos) {
         mouseX = xpos;
         mouseY = ypos;
+
+        if (mouseLastX != mouseX) {
+          cursorMoved = true;
+        } else {
+          cursorMoved = false;
+        }
+        mouseLastX = mouseX;
+        
       }
     };
 
@@ -55,6 +66,14 @@ public class Inputs {
     mouseButtons.free();
   }
 
+  public static boolean getCursorMoved() {
+    return cursorMoved;
+  }
+
+  public static void setCursorMoved(boolean cursorMoved) {
+    Inputs.cursorMoved = cursorMoved;
+  }
+
   public static double getMouseX() {
     return mouseX;
   }
@@ -67,12 +86,13 @@ public class Inputs {
     return keyboard;
   }
 
-  public GLFWCursorPosCallback getMouseMoveCallBack() {
+  public static GLFWCursorPosCallback getMouseMoveCallBack() {
     return mouseMove;
   }
 
   public GLFWMouseButtonCallback getMouseButtonsCallBack() {
     return mouseButtons;
   }
+
 
 }
