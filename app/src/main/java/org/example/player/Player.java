@@ -6,11 +6,15 @@ import org.example.renderEngine.Inputs;
 import org.lwjgl.glfw.GLFW;
 
 public class Player {
-  private float playerPositionX, playerPositionY; 
+  private float playerPositionX, playerPositionY, playerDeltaX, playerDeltaY, playerAngle; 
+
 
   public Player(int posX, int posY) {
     this.playerPositionX = posX;
     this.playerPositionY = posY;
+    this.playerDeltaX = playerDeltaX; 
+    this.playerDeltaY = playerDeltaY; 
+    this.playerAngle = playerAngle; 
   }
 
   public void drawPlayer() {
@@ -37,11 +41,11 @@ public class Player {
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_A)) { 
       playerPositionX -= 2.5;
     }
+    
 
     playerPositionX = Math.max(0, Math.min(playerPositionX, displayWidth)); 
     playerPositionY = Math.max(0, Math.min(playerPositionY, displayHeight));
+
   }
-
-
 
 }
