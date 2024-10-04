@@ -6,7 +6,7 @@ import org.example.map.Map;
 import org.example.player.Player;
 
 public class Rays3D {
-  private float rayX, rayY, rayAngle, xOffSet, yOffSet;
+  private float rayX, rayY, rayAngle, xOffSet, yOffSet, rayDistance;
   private int ray, mapX, mapY, mapPosition, depthOffField;
 
   private Player player = new Player(300, 300);
@@ -20,6 +20,8 @@ public class Rays3D {
     this.rayAngle = 0; 
     this.xOffSet = 0; 
     this.yOffSet = 0; 
+    this.rayDistance = 0;
+
     this.ray = 0; 
     this.mapX = 0; 
     this.mapY = 0; 
@@ -137,11 +139,15 @@ public class Rays3D {
       if (distanceVertical < distanceHorizontal) { // shorther distance
         rayX = verticalX;
         rayY = verticalY;
+
+        rayDistance = distanceVertical;
       }
 
       if (distanceVertical > distanceHorizontal) { // shorther distance
         rayX = horizontalX;
         rayY = horizontalY;
+
+        rayDistance = distanceHorizontal;
       }
 
       glColor3f(0, 1, 0);
@@ -149,6 +155,22 @@ public class Rays3D {
       glBegin(GL_LINES);
       glVertex2f(player.getPlayerPositionX(), player.getPlayerPositionY());
       glVertex2f(rayX, rayY);
+      glEnd();
+
+      // draw 3D walls
+      // line height
+      float lineHeight = (realMap.getMapSquare()*320)/rayDistance;
+      if ( lineHeight > 320 ) {
+        lineHeight = 320;
+      }
+
+      // line OffSet
+      float lineOffSet = 160-lineHeight/2;
+
+      glLineWidth(30);
+      glBegin(GL_LINES);
+      glVertex2f(ray * 8+530, lineOffSet+50);
+      glVertex2f(ray * 8+530, lineHeight+lineOffSet+50);
       glEnd();
 
       rayAngle += Math.toRadians(1);
