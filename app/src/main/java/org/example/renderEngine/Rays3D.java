@@ -134,6 +134,7 @@ public class Rays3D {
         }
       }
 
+      // draw 3D rays
       // shorther distance
       if (distanceVertical < distanceHorizontal) { 
         rayX = verticalX;
@@ -146,7 +147,7 @@ public class Rays3D {
         rayY = horizontalY;
       }
 
-      glColor3f(0, 1, 0);
+      glColor3f(1, 0, 0);
       glLineWidth(4);
       glBegin(GL_LINES);
       glVertex2f(player.getPlayerPositionX(), player.getPlayerPositionY());

@@ -128,5 +128,9 @@ public class DisplayMananger {
 
   }
 
+  public long getDisplay() {
+    return display;
+  }
+
 
 }
