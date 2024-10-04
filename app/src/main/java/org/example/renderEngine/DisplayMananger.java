@@ -7,10 +7,10 @@ import org.lwjgl.opengl.GL11;
 
 public class DisplayMananger {
   private int width, height;
-  private static String title;
-  private static long display;
+  private String title;
+  private long display;
 
-  public static int frames;
+  public int frames;
   public static long time;
 
   public Inputs inputs;
@@ -105,7 +105,7 @@ public class DisplayMananger {
   }
 
 
-  public static void updateDisplay() {
+  public void updateDisplay() {
     // color on screeen (0.0 to 1.0. GlCrear use GlCrearColor to set the color
     GL11.glClearColor(backgroundRed, backgroundGreen, backgroundBlue, 1.0f);
     GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
@@ -131,6 +131,4 @@ public class DisplayMananger {
   public long getDisplay() {
     return display;
   }
-
-
 }
