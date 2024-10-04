@@ -5,16 +5,17 @@ import static org.lwjgl.opengl.GL11.*;
 import org.example.map.Map;
 import org.example.player.Player;
 
-public class Rays3D {
+public class RaysDraw {
   private float rayX, rayY, rayAngle, xOffSet, yOffSet, rayDistance;
   private int ray, mapX, mapY, mapPosition, depthOffField;
 
   private Player player = new Player(300, 300);
   private Map realMap;
 
-  public Rays3D(Player player, Map map) {
+  public RaysDraw(Player player, Map map, int WIDTHGAME3D) {
     this.player = player;
     this.realMap = map;
+
     this.rayX = 0;
     this.rayY = 0;
     this.rayAngle = 0; 
@@ -34,7 +35,7 @@ public class Rays3D {
     return ((float)(Math.sqrt((bX - aX) * (bX - aX) + (bY - aY) * (bY - aY))));
   }
 
-  public void drawRays3D() {
+  public void drawRays(String raysUse) {
     rayAngle = (float) (player.getPlayerAngle() - Math.toRadians(1)*30);
     if (rayAngle < 0) {
       rayAngle += 2*Math.PI;
@@ -43,7 +44,7 @@ public class Rays3D {
       rayAngle -= 2*Math.PI;
     }
 
-    for (ray = 0; ray < 60; ray++) {
+    for (ray = 0; ray < 480; ray++) {
       // check horizontal lines
       depthOffField = 0;
       float distanceHorizontal = 10000000, horizontalX = player.getPlayerPositionX(), horizontalY = player.getPlayerPositionY();
@@ -142,6 +143,8 @@ public class Rays3D {
         rayX = verticalX;
         rayY = verticalY;
 
+        glColor3f(0, 0.9f, 0);
+
         rayDistance = distanceVertical;
       }
 
@@ -150,38 +153,60 @@ public class Rays3D {
         rayX = horizontalX;
         rayY = horizontalY;
 
+        glColor3f(0, 0.7f, 0);
+
         rayDistance = distanceHorizontal;
       }
 
-      glColor3f(0, 1, 0);
-      glLineWidth(4);
-      glBegin(GL_LINES);
-      glVertex2f(player.getPlayerPositionX(), player.getPlayerPositionY());
-      glVertex2f(rayX, rayY);
-      glEnd();
+      // calcule 3D walls
+      float cameraEye = player.getPlayerAngle() - rayAngle;
+      if (cameraEye < 0) {
+        cameraEye += 2*Math.PI;
+      }
+      if (cameraEye > 2*Math.PI) {
+        cameraEye -= 2*Math.PI;
+      }
 
-      // draw 3D walls
+      // fix fishEye
+      rayDistance = (float) (rayDistance * Math.cos(cameraEye));
       // line height
       float lineHeight = (realMap.getMapSquare()*320)/rayDistance;
       if ( lineHeight > 320 ) {
         lineHeight = 320;
       }
-
       // line OffSet
       float lineOffSet = 160-lineHeight/2;
 
-      glLineWidth(30);
-      glBegin(GL_LINES);
-      glVertex2f(ray * 8+530, lineOffSet+50);
-      glVertex2f(ray * 8+530, lineHeight+lineOffSet+50);
-      glEnd();
-
-      rayAngle += Math.toRadians(1);
+      rayAngle += Math.toRadians(0.125);
       if (rayAngle < 0) {
         rayAngle += 2*Math.PI;
       }
       if (rayAngle > 2*Math.PI) {
         rayAngle -= 2*Math.PI;
+      }
+
+      // for 2 screens
+      switch (raysUse.toLowerCase()) {
+        case "raysuse2d":
+        glColor3f(0, 1, 0);
+        glLineWidth(1);
+        glBegin(GL_LINES);
+        glVertex2f(player.getPlayerPositionX(), player.getPlayerPositionY());
+        glVertex2f(rayX, rayY);
+        glEnd();
+        break;
+
+        // draw 3D walls
+        case "raysuse3d":
+        glLineWidth(5);
+        glBegin(GL_LINES);
+        glVertex2f((float)(ray * 2.2), lineOffSet);
+        glVertex2f((float)(ray * 2.2), lineHeight+lineOffSet+50);
+        glEnd();
+        break;
+
+        default:
+        break;
       }
 
     }
