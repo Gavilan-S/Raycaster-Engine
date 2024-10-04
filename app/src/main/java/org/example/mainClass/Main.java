@@ -79,9 +79,6 @@ public class Main implements Runnable {
     GL11.glClearColor(0.48f, 0.50f, 0.52f, 1.0f);
     GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-    map.drawMap2d();
-    player.drawPlayer();
-    player.movePlayer(WIDTH, HEIGHT);
     rays3d.drawRays3D();
 
 
