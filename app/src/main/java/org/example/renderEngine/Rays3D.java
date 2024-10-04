@@ -153,7 +153,7 @@ public class Rays3D {
         rayDistance = distanceHorizontal;
       }
 
-      glColor3f(1, 0, 0);
+      glColor3f(0, 1, 0);
       glLineWidth(4);
       glBegin(GL_LINES);
       glVertex2f(player.getPlayerPositionX(), player.getPlayerPositionY());
