@@ -12,7 +12,8 @@ import org.lwjgl.opengl.GL11;
 
 public class Main implements Runnable {
   private final int WIDTH = 1024, HEIGHT = 576;
-  private DisplayMananger display;
+  private DisplayMananger displayRayCast2D;
+  private DisplayMananger displayGame3D;
   private Player player;
   private Map map;
   private Rays3D rays3d; 
@@ -35,35 +36,53 @@ public class Main implements Runnable {
   public void init() {
     System.out.println("init new game");
     // crate the window with DisplayMananger class
-    display = new DisplayMananger(WIDTH, HEIGHT, "RayCasting");
-    display.setBackgroundColor(0.48f, 0.50f, 0.52f);
-    display.createDisplay();
+    displayRayCast2D = new DisplayMananger(WIDTH, HEIGHT, "RayCasting2D");
+    displayRayCast2D.createDisplay();
+
+    displayGame3D = new DisplayMananger(WIDTH, HEIGHT, "Game3D");
+    displayGame3D.createDisplay();
+
   }
 
   public void run() {
     init();
     System.out.println("runnig new game");
     // while is not close -> update, render
-    while (!display.closeDisplay()) {
+    while (!displayRayCast2D.closeDisplay() && !displayGame3D.closeDisplay()) {
       update();
       render();
       // exit while if ESCAPE is press
       if (Inputs.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) return;
     }
-    display.destroyFree();
+    displayRayCast2D.destroyFree();
+    displayGame3D.destroyFree();
   }
 
   private void update() {
-    display.updateDisplay();
+    displayRayCast2D.updateDisplay();
+    displayGame3D.updateDisplay();
   }
 
   private void render() {
+    GLFW.glfwMakeContextCurrent(displayRayCast2D.getDisplay());
+    GL11.glClearColor(0.48f, 0.50f, 0.52f, 1.0f);
     GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+
     map.drawMap2d();
     player.drawPlayer();
     player.movePlayer(WIDTH, HEIGHT);
     rays3d.drawRays3D();
-    display.swapBuffers(); 
+    displayRayCast2D.swapBuffers(); 
+
+    GLFW.glfwMakeContextCurrent(displayGame3D.getDisplay());
+    GL11.glClearColor(0.48f, 0.50f, 0.52f, 1.0f);
+    GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+
+    map.drawMap2d();
+    player.drawPlayer();
+    player.movePlayer(WIDTH, HEIGHT);
+    rays3d.drawRays3D();
+    displayGame3D.swapBuffers(); 
   }
 
   public static void main(String[] args) {
