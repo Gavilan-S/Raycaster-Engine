@@ -120,8 +120,8 @@ public class Rays3D {
         mapY = (int) (rayY) >> 6;
         mapPosition = mapY * realMap.getMapUnitsX() + mapX; 
 
-        if (mapPosition > 0 && mapPosition < realMap.getMapUnitsY() * realMap.getMapUnitsX() && realMap.getMap()[mapPosition] == 1) { // ray hit a wall
-          
+        // ray hit a wall
+        if (mapPosition > 0 && mapPosition < realMap.getMapUnitsY() * realMap.getMapUnitsX() && realMap.getMap()[mapPosition] == 1) { 
           verticalX = rayX;
           verticalY = rayY;
           distanceVertical = distancePlayerEndPoint(player.getPlayerPositionX(), player.getPlayerPositionY(), verticalX, verticalY, rayAngle);          
@@ -134,12 +134,14 @@ public class Rays3D {
         }
       }
 
-      if (distanceVertical < distanceHorizontal) { // shorther distance
+      // shorther distance
+      if (distanceVertical < distanceHorizontal) { 
         rayX = verticalX;
         rayY = verticalY;
       }
 
-      if (distanceVertical > distanceHorizontal) { // shorther distance
+      // shorther distance
+      if (distanceVertical > distanceHorizontal) {
         rayX = horizontalX;
         rayY = horizontalY;
       }
