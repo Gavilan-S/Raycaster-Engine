@@ -4,6 +4,7 @@ import org.example.map.Map;
 import org.example.player.Player;
 import org.example.renderEngine.DisplayMananger;
 import org.example.renderEngine.Inputs;
+import org.example.renderEngine.Rays3D;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
@@ -11,9 +12,10 @@ import org.lwjgl.opengl.GL11;
 
 public class Main implements Runnable {
   private final int WIDTH = 1024, HEIGHT = 576;
-  public DisplayMananger display;
-  public Player player;
-  public Map map;
+  private DisplayMananger display;
+  private Player player;
+  private Map map;
+  private Rays3D rays3d; 
 
   // Thread help us to run the same code at the same time
   public Thread threadOne;
@@ -27,6 +29,7 @@ public class Main implements Runnable {
 
     this.player = new Player(300, 300);
     this.map = new Map();
+    this.rays3d = new Rays3D(player, map);
   }
 
   public void init() {
@@ -59,7 +62,7 @@ public class Main implements Runnable {
     map.drawMap2d();
     player.drawPlayer();
     player.movePlayer(WIDTH, HEIGHT);
-    player.check();
+    rays3d.drawRays3D();
     display.swapBuffers(); 
   }
 

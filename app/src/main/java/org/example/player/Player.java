@@ -17,12 +17,14 @@ public class Player {
   }
 
   public void drawPlayer() {
+    // square for player
     glColor3f(1.0f, 1.0f, 0.0f);
     glPointSize(10);
     glBegin(GL_POINTS);
     glVertex2f(playerPositionX, playerPositionY);
     glEnd();
 
+    // line for player vision
     glLineWidth(3);
     glBegin(GL_LINES);
     glVertex2f(playerPositionX, playerPositionY);
@@ -32,37 +34,40 @@ public class Player {
 
   public void movePlayer(int displayWidth, int displayHeight) {
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_W)) { 
-      playerPositionY += playerDeltaY*0.22;
-      playerPositionX += playerDeltaX*0.22;
+      playerPositionY += playerDeltaY*0.1;
+      playerPositionX += playerDeltaX*0.1;
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_S)) { 
-      playerPositionY -= playerDeltaY*0.2;
-      playerPositionX -= playerDeltaX*0.2;
+      playerPositionY -= playerDeltaY*0.1;
+      playerPositionX -= playerDeltaX*0.1;
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_D)) { 
-      playerPositionX += 0.6;
+      playerPositionY -= (Math.cos(playerAngle) * 0.5); 
+      playerPositionX += (Math.sin(playerAngle) * 0.5);
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_A)) { 
-      playerPositionX -= 0.6;
+      playerPositionY += (Math.cos(playerAngle) * 0.5); 
+      playerPositionX -= (Math.sin(playerAngle) * 0.5);
     }
 
+    // do not get out of the screen
     playerPositionX = Math.max(0, Math.min(playerPositionX, displayWidth)); 
     playerPositionY = Math.max(0, Math.min(playerPositionY, displayHeight));
 
+    // player vision move
     if (Inputs.getCursorMoved()) {
       if(Inputs.getMouseX() < playerMouseX) {
         playerAngle -= 0.05;
         if (playerAngle < 0) {
           playerAngle += 2 * Math.PI;
         }
-        playerDeltaX = (float) (Math.cos(playerAngle)*5);
-        playerDeltaY = (float) (Math.sin(playerAngle)*5);
+        playerDeltaX = (float) (Math.cos(playerAngle)*4);
+        playerDeltaY = (float) (Math.sin(playerAngle)*4);
 
         playerMouseX = (float) Inputs.getMouseX();
-        System.out.println("pda=" + playerAngle);
       }
 
       if(Inputs.getMouseX() > playerMouseX) {
@@ -70,21 +75,25 @@ public class Player {
         if (playerAngle > 2*Math.PI) {
           playerAngle -= 2 * Math.PI;
         }
-        playerDeltaX = (float) (Math.cos(playerAngle)*5);
-        playerDeltaY = (float) (Math.sin(playerAngle)*5);
+        playerDeltaX = (float) (Math.cos(playerAngle)*4);
+        playerDeltaY = (float) (Math.sin(playerAngle)*4);
 
         playerMouseX = (float) Inputs.getMouseX();
-        System.out.println("pda=" + playerAngle);
       }
     }
 
   }
-
-    public void check() {
-    if (Inputs.getCursorMoved()) {
-      System.out.println(Inputs.getMouseX());
-    }
-    Inputs.setCursorMoved(false);
+  public float getPlayerPositionX() {
+    return playerPositionX;
   }
-      
+
+  public float getPlayerPositionY() {
+    return playerPositionY;
+  }    
+
+  public float getPlayerAngle() {
+    return playerAngle;
+  }
+
+
 }

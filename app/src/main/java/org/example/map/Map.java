@@ -51,6 +51,19 @@ public class Map {
 
   }
 
+  public int getMapUnitsX() {
+    return mapUnitsX;
+  }
 
+  public int getMapUnitsY() {
+    return mapUnitsY;
+  }
 
+  public int getMapSquare() {
+    return mapSquare;
+  }
+
+  public int[] getMap() {
+    return map;
+  }
 }
