@@ -198,10 +198,10 @@ public class RaysDraw {
 
         // draw 3D walls
         case "raysuse3d":
-        glLineWidth(5);
+        glLineWidth(8);
         glBegin(GL_LINES);
-        glVertex2f((float)(ray * 2.2), lineOffSet);
-        glVertex2f((float)(ray * 2.2), lineHeight+lineOffSet+50);
+        glVertex2d((ray * 2.2), lineOffSet+50);
+        glVertex2d((ray * 2.2), lineHeight+lineOffSet+ 50);
         glEnd();
         break;
 

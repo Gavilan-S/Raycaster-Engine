@@ -1,22 +1,26 @@
 package org.example.mainClass;
 
 import org.example.map.Map;
+import org.example.map.MapSectors;
 import org.example.player.Player;
 import org.example.renderEngine.DisplayMananger;
 import org.example.renderEngine.Inputs;
 import org.example.renderEngine.RaysDraw;
 import org.lwjgl.glfw.GLFW;
+
 import org.lwjgl.opengl.GL11;
 
 // basic stuff: start (for thread), init (create window) <- run <- (init, update, render)
 
 public class Main implements Runnable {
-  private final int WIDTHRAYCAST2D = 500, HEIGHTRAYCAST2D = 576, WIDTHGAME3D = 1024, HEIGHTGAME3D = 576;
+  private final int WIDTHRAYCAST2D = 1700, HEIGHTRAYCAST2D = 1000, WIDTHGAME3D = 1024, HEIGHTGAME3D = 576;
   private DisplayMananger displayRayCast2D;
   private DisplayMananger displayGame3D;
   private Player player;
   private Map map;
   private RaysDraw raysDraw; 
+
+  private MapSectors mapSectors;
 
   // Thread help us to run the same code at the same time
   public Thread threadOne;
@@ -31,6 +35,8 @@ public class Main implements Runnable {
     this.player = new Player(300, 300);
     this.map = new Map();
     this.raysDraw = new RaysDraw(player, map, WIDTHGAME3D);
+
+    this.mapSectors = new MapSectors();
   }
 
   public void init() {
@@ -66,13 +72,10 @@ public class Main implements Runnable {
   private void render() {
     // render 2D
     GLFW.glfwMakeContextCurrent(displayRayCast2D.getDisplay());
-    GL11.glClearColor(0.48f, 0.50f, 0.52f, 1.0f);
+    GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-    map.drawMap2d();
-    player.drawPlayer();
-    player.movePlayer(WIDTHRAYCAST2D, HEIGHTRAYCAST2D);
-    raysDraw.drawRays("raysuse2d");
+    mapSectors.drawMapSectors();
 
     displayRayCast2D.swapBuffers(); 
 
