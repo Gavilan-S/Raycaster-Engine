@@ -6,7 +6,7 @@ import org.example.renderEngine.Inputs;
 import org.lwjgl.glfw.GLFW;
 
 public class Player {
-  private float playerMouseX= (float) Inputs.getMouseX(), playerDeltaX, playerDeltaY, playerAngle, playerPositionX, playerPositionY, playerPositionZ, playerLookUpDown; 
+  private float playerMouseX = (float) Inputs.getMouseX(), playerMouseY = (float) Inputs.getMouseY(), playerDeltaX, playerDeltaY, playerAngle, playerPositionX, playerPositionY, playerPositionZ, playerLookUpDown; 
 
   public Player(int posX, int posY, int posZ, int lookUpDown, int angle) {
     this.playerPositionX = posX;
@@ -62,6 +62,7 @@ public class Player {
 
     // player vision move
     if (Inputs.getCursorMoved()) {
+      // looking left/rigth
       if(Inputs.getMouseX() < playerMouseX) {
         playerAngle -= 4;
         if (playerAngle < 0) {
@@ -77,9 +78,17 @@ public class Player {
         }
         playerMouseX = (float) Inputs.getMouseX();
       }
-    }
 
+      // looking up/down
+      if(Inputs.getMouseY() < playerMouseY) {
+
+      }
+      if(Inputs.getMouseY() > playerMouseY) {
+
+      }
+    }
   }
+
   public float getPlayerPositionX() {
     return playerPositionX;
   }
