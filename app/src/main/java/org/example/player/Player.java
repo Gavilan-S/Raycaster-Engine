@@ -6,14 +6,17 @@ import org.example.renderEngine.Inputs;
 import org.lwjgl.glfw.GLFW;
 
 public class Player {
-  private float playerMouseX= (float) Inputs.getMouseX(), playerDeltaX, playerDeltaY, playerAngle, playerPositionX, playerPositionY; 
+  private float playerMouseX= (float) Inputs.getMouseX(), playerDeltaX, playerDeltaY, playerAngle, playerPositionX, playerPositionY, playerPositionZ, playerLookUpDown; 
 
-  public Player(int posX, int posY) {
+  public Player(int posX, int posY, int posZ, int lookUpDown, int angle) {
     this.playerPositionX = posX;
     this.playerPositionY = posY;
+    this.playerPositionZ = posZ;
+    this.playerLookUpDown = lookUpDown;
+    this.playerAngle = angle; 
+
     this.playerDeltaX = (float) Math.cos(playerAngle)*5; 
     this.playerDeltaY = (float) Math.sin(playerAngle)*5; 
-    this.playerAngle = playerAngle; 
   }
 
   public void drawPlayer() {

@@ -1,5 +1,6 @@
 package org.example.mainClass;
 
+import org.example.player.Player;
 import org.example.renderEngine.DisplayMananger;
 import org.example.renderEngine.Inputs;
 import org.lwjgl.glfw.GLFW;
@@ -10,7 +11,9 @@ import org.lwjgl.opengl.GL11;
 
 public class Main implements Runnable {
   private final int WIDTHGAME = 1024, HEIGHTGAME = 576;
+
   private DisplayMananger displayGame;
+  private Player player;
 
   // Thread help us to run the same code at the same time
   public Thread threadOne;
@@ -21,6 +24,8 @@ public class Main implements Runnable {
     // the thread use run cause main implements runnable
     threadOne = new Thread(this, "first thread");
     threadOne.start();
+
+    this.player = new Player(70, 110, 20, 0, 0);
   }
 
   public void init() {
@@ -31,7 +36,6 @@ public class Main implements Runnable {
 
     displayGame = new DisplayMananger(WIDTHGAME, HEIGHTGAME, "Game");
     displayGame.createDisplay();
-
   }
 
   public void run() {
