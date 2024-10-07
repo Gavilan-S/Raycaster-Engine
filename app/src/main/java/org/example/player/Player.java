@@ -15,8 +15,8 @@ public class Player {
     this.playerLookUpDown = lookUpDown;
     this.playerAngle = angle; 
 
-    this.playerDeltaX = (float) Math.cos(playerAngle)*5; 
-    this.playerDeltaY = (float) Math.sin(playerAngle)*5; 
+    this.playerDeltaX = (float) Math.sin(playerAngle)*10; 
+    this.playerDeltaY = (float) Math.cos(playerAngle)*10; 
   }
 
   public void drawPlayer() {
@@ -37,23 +37,23 @@ public class Player {
 
   public void movePlayer(int displayWidth, int displayHeight) {
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_W)) { 
-      playerPositionY += playerDeltaY*0.1;
-      playerPositionX += playerDeltaX*0.1;
+      playerPositionX += playerDeltaX;
+      playerPositionY += playerDeltaY;
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_S)) { 
-      playerPositionY -= playerDeltaY*0.1;
-      playerPositionX -= playerDeltaX*0.1;
+      playerPositionX -= playerDeltaX;
+      playerPositionY -= playerDeltaY;
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_D)) { 
-      playerPositionY += (Math.cos(playerAngle) * 0.5); 
-      playerPositionX -= (Math.sin(playerAngle) * 0.5);
+      playerPositionX -= (Math.sin(playerAngle));
+      playerPositionY += (Math.cos(playerAngle)); 
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_A)) { 
-      playerPositionY -= (Math.cos(playerAngle) * 0.5); 
-      playerPositionX += (Math.sin(playerAngle) * 0.5);
+      playerPositionX += (Math.sin(playerAngle));
+      playerPositionY -= (Math.cos(playerAngle)); 
     }
 
     // do not get out of the screen
@@ -63,24 +63,18 @@ public class Player {
     // player vision move
     if (Inputs.getCursorMoved()) {
       if(Inputs.getMouseX() < playerMouseX) {
-        playerAngle -= 0.05;
+        playerAngle -= 4;
         if (playerAngle < 0) {
-          playerAngle += 2 * Math.PI;
+          playerAngle += 360;
         }
-        playerDeltaX = (float) (Math.cos(playerAngle)*4);
-        playerDeltaY = (float) (Math.sin(playerAngle)*4);
-
         playerMouseX = (float) Inputs.getMouseX();
       }
 
       if(Inputs.getMouseX() > playerMouseX) {
-        playerAngle += 0.05;
-        if (playerAngle > 2*Math.PI) {
-          playerAngle -= 2 * Math.PI;
+        playerAngle += 4;
+        if (playerAngle > 359) {
+          playerAngle -= 360;
         }
-        playerDeltaX = (float) (Math.cos(playerAngle)*4);
-        playerDeltaY = (float) (Math.sin(playerAngle)*4);
-
         playerMouseX = (float) Inputs.getMouseX();
       }
     }
