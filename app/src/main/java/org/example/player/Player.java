@@ -1,64 +1,59 @@
 package org.example.player;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import org.example.renderEngine.Inputs;
 import org.lwjgl.glfw.GLFW;
 
 public class Player {
-  private float playerMouseX = (float) Inputs.getMouseX(), playerMouseY = (float) Inputs.getMouseY(), playerDeltaX, playerDeltaY, playerAngle, playerPositionX, playerPositionY, playerPositionZ, playerLookUpDown; 
+  private float playerMouseX = (float) Inputs.getMouseX(), playerMouseY = (float) Inputs.getMouseY();
 
-  public Player(int posX, int posY, int posZ, int lookUpDown, int angle) {
+  private float playerAngle, playerPositionX, playerPositionY, playerPositionZ, playerLookUpDown; 
+
+  private float playerDeltaX, playerDeltaY;
+
+  public Player(float posX, float posY, float posZ, float lookUpDown, float angle) {
     this.playerPositionX = posX;
     this.playerPositionY = posY;
     this.playerPositionZ = posZ;
     this.playerLookUpDown = lookUpDown;
     this.playerAngle = angle; 
 
-    this.playerDeltaX = (float) Math.sin(playerAngle)*10; 
-    this.playerDeltaY = (float) Math.cos(playerAngle)*10; 
   }
 
-  public void drawPlayer() {
-    // square for player
-    glColor3f(1.0f, 1.0f, 0.0f);
-    glPointSize(10);
-    glBegin(GL_POINTS);
-    glVertex2f(playerPositionX, playerPositionY);
-    glEnd();
-
-    // line for player vision
-    glLineWidth(3);
-    glBegin(GL_LINES);
-    glVertex2f(playerPositionX, playerPositionY);
-    glVertex2f(playerPositionX+playerDeltaX*5, playerPositionY+playerDeltaY*5);
-    glEnd();
+  public void update() {
+    this.playerDeltaX = (float) Math.sin(Math.toRadians(playerAngle)) * 10;
+    this.playerDeltaY = (float) Math.cos(Math.toRadians(playerAngle)) * 10;
   }
 
   public void movePlayer(int displayWidth, int displayHeight) {
+    update();
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_W)) { 
       playerPositionX += playerDeltaX;
       playerPositionY += playerDeltaY;
+      System.out.println("W");
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_S)) { 
       playerPositionX -= playerDeltaX;
       playerPositionY -= playerDeltaY;
+      System.out.println("S");
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_D)) { 
-      playerPositionX -= (Math.sin(playerAngle));
-      playerPositionY += (Math.cos(playerAngle)); 
+      playerPositionX += playerDeltaY;
+      playerPositionY -= playerDeltaX;
+      System.out.println("D");
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_A)) { 
-      playerPositionX += (Math.sin(playerAngle));
-      playerPositionY -= (Math.cos(playerAngle)); 
+      playerPositionX -= playerDeltaY;
+      playerPositionY += playerDeltaX;
+      System.out.println("S");
+
     }
 
     // do not get out of the screen
-    playerPositionX = Math.max(0, Math.min(playerPositionX, displayWidth)); 
-    playerPositionY = Math.max(0, Math.min(playerPositionY, displayHeight));
+    // playerPositionX = Math.max(0, Math.min(playerPositionX, displayWidth)); 
+    // playerPositionY = Math.max(0, Math.min(playerPositionY, displayHeight));
 
     // player vision move
     if (Inputs.getCursorMoved()) {
@@ -68,6 +63,7 @@ public class Player {
         if (playerAngle < 0) {
           playerAngle += 360;
         }
+        System.out.println("left");
         playerMouseX = (float) Inputs.getMouseX();
       }
 
@@ -76,15 +72,21 @@ public class Player {
         if (playerAngle > 359) {
           playerAngle -= 360;
         }
+        System.out.println("right");
         playerMouseX = (float) Inputs.getMouseX();
       }
 
       // looking up/down
       if(Inputs.getMouseY() < playerMouseY) {
-
+        playerLookUpDown -= 1;
+        System.out.println("up");
+        playerMouseY = (float) Inputs.getMouseY();
       }
-      if(Inputs.getMouseY() > playerMouseY) {
 
+      if(Inputs.getMouseY() > playerMouseY) {
+        playerLookUpDown += 1;
+        System.out.println("down");
+        playerMouseY = (float) Inputs.getMouseY();
       }
     }
   }
@@ -97,9 +99,27 @@ public class Player {
     return playerPositionY;
   }    
 
+  public float getPlayerPositionZ() {
+    return playerPositionZ;
+  }    
+
   public float getPlayerAngle() {
     return playerAngle;
   }
+
+  public float getPlayerLookUpDown() {
+    return playerLookUpDown;
+  }
+
+  public float getPlayerDeltaX() {
+    return playerDeltaX;
+  }
+
+  public float getPlayerDeltaY() {
+    return playerDeltaY;
+  }
+
+
 
 
 }
