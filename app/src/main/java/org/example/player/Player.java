@@ -29,63 +29,58 @@ public class Player {
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_W)) { 
       playerPositionX += playerDeltaX;
       playerPositionY += playerDeltaY;
-      System.out.println("W");
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_S)) { 
       playerPositionX -= playerDeltaX;
       playerPositionY -= playerDeltaY;
-      System.out.println("S");
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_D)) { 
       playerPositionX += playerDeltaY;
       playerPositionY -= playerDeltaX;
-      System.out.println("D");
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_A)) { 
       playerPositionX -= playerDeltaY;
       playerPositionY += playerDeltaX;
-      System.out.println("S");
-
     }
 
-    // do not get out of the screen
-    // playerPositionX = Math.max(0, Math.min(playerPositionX, displayWidth)); 
-    // playerPositionY = Math.max(0, Math.min(playerPositionY, displayHeight));
+    if (Inputs.isKeyDown(GLFW.GLFW_KEY_SPACE)) {
+      playerPositionZ += 4;
+    }
+
+    if (Inputs.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL)) {
+      playerPositionZ -= 4;
+    }
 
     // player vision move
     if (Inputs.getCursorMoved()) {
       // looking left/rigth
       if(Inputs.getMouseX() < playerMouseX) {
-        playerAngle -= 4;
+        playerAngle -= 2;
         if (playerAngle < 0) {
           playerAngle += 360;
         }
-        System.out.println("left");
         playerMouseX = (float) Inputs.getMouseX();
       }
 
       if(Inputs.getMouseX() > playerMouseX) {
-        playerAngle += 4;
+        playerAngle += 2;
         if (playerAngle > 359) {
           playerAngle -= 360;
         }
-        System.out.println("right");
         playerMouseX = (float) Inputs.getMouseX();
       }
 
       // looking up/down
       if(Inputs.getMouseY() < playerMouseY) {
         playerLookUpDown -= 1;
-        System.out.println("up");
         playerMouseY = (float) Inputs.getMouseY();
       }
 
       if(Inputs.getMouseY() > playerMouseY) {
         playerLookUpDown += 1;
-        System.out.println("down");
         playerMouseY = (float) Inputs.getMouseY();
       }
     }

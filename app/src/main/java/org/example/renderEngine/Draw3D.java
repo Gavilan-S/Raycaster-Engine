@@ -7,7 +7,7 @@ public class Draw3D {
   private DisplayMananger display = new DisplayMananger();
   private Pixels pixels = new Pixels();
 
-  private int[] wordX, wordY, wordZ;
+  private int[] wallX, wallY, wallZ;
   private double playerCos, playerSin; 
 
   // offSet bottom 2 points by player
@@ -15,9 +15,9 @@ public class Draw3D {
   private int pointTwoX, pointTwoY;
 
   public Draw3D() {
-    this.wordX = new int[4];
-    this.wordY = new int[4];
-    this.wordZ = new int[4];
+    this.wallX = new int[4];
+    this.wallY = new int[4];
+    this.wallZ = new int[4];
   }
 
   public void update() {
@@ -35,68 +35,117 @@ public class Draw3D {
     pointTwoX = 20-(int)player.getPlayerPositionX();
     pointTwoY= 150-(int)player.getPlayerPositionY();
     // word x position
-    wordX[0] = pointOneX*(int)playerCos-pointOneY*(int)playerSin;
-    wordX[1] = pointTwoX*(int)playerCos-pointTwoY*(int)playerSin;
-    wordX[2] = wordX[0]; // top line has same X
-    wordX[3] = wordX[1];
+    wallX[0] = pointOneX*(int)playerCos-pointOneY*(int)playerSin;
+    wallX[1] = pointTwoX*(int)playerCos-pointTwoY*(int)playerSin;
+    wallX[2] = wallX[0]; // top line has same X
+    wallX[3] = wallX[1];
 
     // word y position (depth)
-    wordY[0] = pointOneY*(int)playerCos+pointOneX*(int)playerSin;
-    wordY[1] = pointTwoY*(int)playerCos+pointTwoX*(int)playerSin;
-    wordY[2] = wordY[0]; //top line has same Y
-    wordY[3] = wordY[1];
+    wallY[0] = pointOneY*(int)playerCos+pointOneX*(int)playerSin;
+    wallY[1] = pointTwoY*(int)playerCos+pointTwoX*(int)playerSin;
+    wallY[2] = wallY[0]; //top line has same Y
+    wallY[3] = wallY[1];
 
     // word z height
-    wordZ[0] = 0-(int)player.getPlayerPositionZ()+(int)((player.getPlayerLookUpDown()*wordY[0])/32.0);
-    wordZ[1] = 0-(int)player.getPlayerPositionZ()+(int)((player.getPlayerLookUpDown()*wordY[1])/32.0);
-    wordZ[2] = wordZ[0]+40; //top line has new Z
-    wordZ[3] = wordZ[1]+40;
+    wallZ[0] = 0-(int)player.getPlayerPositionZ()+(int)(((player.getPlayerLookUpDown()*wallY[0])/32.0)+0.01);
+    wallZ[1] = 0-(int)player.getPlayerPositionZ()+(int)(((player.getPlayerLookUpDown()*wallY[1])/32.0)+0.01);
+    wallZ[2] = wallZ[0]+190; //top line has new Z
+    wallZ[3] = wallZ[1]+190;
+
+    // do not draw if behind player
+    if (wallY[0] < 0.1 && wallY[1] < 0.1 ) return;
+
+    // pointOne behind player, clip 
+    if (wallY[0] < 1) {
+      clipBehindPlayer(wallX[0], wallY[0], wallZ[0], wallX[1], wallY[1], wallZ[1]); // bot line
+      clipBehindPlayer(wallX[2], wallY[2], wallZ[2], wallX[3], wallY[3], wallZ[3]); // top line
+    }
+
+    // pointTwo behind player, clip
+    if (wallY[1] < 1) {
+      clipBehindPlayer(wallX[1], wallY[1], wallZ[1], wallX[0], wallY[0], wallZ[0]); // bot line
+      clipBehindPlayer(wallX[3], wallY[3], wallZ[3], wallX[2], wallY[2], wallZ[2]); // top line
+    }
 
 
     //secreen (x,y) position
-    wordX[0] = wordX[0]*200/wordY[0]+display.getScreenWidthTwo();
-    wordY[0] = wordZ[0]*200/wordY[0]+display.getScreenHeightTwo();
-    wordX[1] = wordX[1]*200/wordY[1]+display.getScreenWidthTwo();
-    wordY[1] = wordZ[1]*200/wordY[1]+display.getScreenHeightTwo();
+    if (wallY[0] != 0) {
+      wallX[0] = wallX[0] * 200 / wallY[0] + display.getScreenWidthTwo();
+      wallY[0] = wallZ[0] * 200 / wallY[0] + display.getScreenHeightTwo();
+    } else {
+      wallX[0] = 1;
+      wallY[0] = 1;
+    }
+    if (wallY[1] != 0) {
+      wallX[1] = wallX[1] * 200 / wallY[1] + display.getScreenWidthTwo();
+      wallY[1] = wallZ[1] * 200 / wallY[1] + display.getScreenHeightTwo();
+    } else {
+      wallX[1] = 1;
+      wallY[1] = 1;
+    }
+    if (wallY[2] != 0) {
+      wallX[2] = wallX[2] * 200 / wallY[2] + display.getScreenWidthTwo();
+      wallY[2] = wallZ[2] * 200 / wallY[2] + display.getScreenHeightTwo();
+    } else {
+      wallX[2] = 1;
+      wallY[2] = 1;
+    }
+    if (wallY[3] != 0) {
+      wallX[3] = wallX[3] * 200 / wallY[3] + display.getScreenWidthTwo();
+      wallY[3] = wallZ[3] * 200 / wallY[3] + display.getScreenHeightTwo();
+    } else {
+      wallX[3] = 1;
+      wallY[3] = 1;
+    }
 
     // draw points
-    // if (wordX[0] > 0 && wordX[0] < display.getScreenWidth() && wordY[0] > 0 && wordY[0] < display.getScreenHeight() ) pixels.pixel(wordX[0], wordY[0], 0);
-    // if (wordX[1] > 0 && wordX[1] < display.getScreenWidth() && wordY[1] > 0 && wordY[1] < display.getScreenHeight() ) pixels.pixel(wordX[1], wordY[1], 0);
-    
-
-    drawWall(wordX[0], wordX[1], wordY[0], wordY[1]);
+    drawWall(wallX[0], wallX[1], wallY[0], wallY[1], wallY[2], wallY[3]);
   }
 
-  public void drawWall(int pointOneX, int pointTwoX, int botLineOne, int botLineTwo) {
-    int distanceBotY = botLineTwo - botLineOne; // y distace of bottom line
+  private void clipBehindPlayer(float clipPointOneX, float clipPointOneY, float clipPointOneZ, float clipPointTwoX, float clipPointTwoY, float clipPointTwoZ) {
+    float distancePointA = clipPointOneY; // distance plane -> pointA
+    float distancePointB = clipPointTwoY; // distance plane -> pointB
+    float distanceTotal = distancePointB - distancePointA;
+    if (distanceTotal == 0) distanceTotal = 1;
+    float intersection = distancePointA/(distancePointA-distancePointB);
 
+    clipPointOneX = clipPointOneX + intersection*(clipPointTwoX-(clipPointOneX));
+    clipPointOneY = clipPointOneY + intersection*(clipPointTwoY-(clipPointOneX));
+    if (clipPointOneY == 0) clipPointOneY = 1; // prevent divide by zero error
+    clipPointOneZ = clipPointOneZ + intersection*(clipPointTwoZ-(clipPointOneZ));
+  }
+
+  private void drawWall(int pointOneX, int pointTwoX, int botLineOne, int botLineTwo, int topLineOne, int topLineTwo) {
+    int distanceBotY = botLineTwo - botLineOne; // y distace of bottom line
+    int distanceTopY = topLineTwo - topLineOne; // y distace of top line
     int distanceX = pointTwoX - pointOneX; 
     if ( distanceX == 0 ) distanceX = 1;
 
     int pointOneStartingPositionX = pointOneX; // hold initial pointOneX startingPosition
+    // clip X
+    if (pointOneX < 0) pointOneX = 0; // clip left
+    if (pointTwoX < 0) pointTwoX = 0; // clip left
+    if (pointOneX > display.getScreenWidth()-0) pointOneX = display.getScreenWidth()-0; // clip right
+    if (pointTwoX > display.getScreenWidth()-0) pointTwoX = display.getScreenWidth()-0; // clip right
   
     // draw X veticle lines
     for (int pointOneXFor = pointOneX; pointOneXFor < pointTwoX; pointOneXFor++) {
       // y start an end point
-      double pointOneYDraw = distanceBotY * (pointOneXFor - pointOneStartingPositionX + 0.5)/distanceX+botLineOne; // y bottom point
-      pixels.pixel(pointOneXFor, (int)pointOneYDraw, 0); // bottom
+      
+      double pointOneY = distanceBotY * (pointOneXFor - pointOneStartingPositionX + 0.5)/distanceX+botLineOne; // y bottom point
+      double pointTwoY = distanceTopY * (pointOneXFor - pointOneStartingPositionX + 0.5)/distanceX+topLineOne; // y top point
+      // clip Y
+      if (pointOneY < 0) pointOneY = 0; // clip y
+      if (pointTwoY < 0) pointTwoY = 0; // clip y
+      if (pointOneY > display.getScreenHeight()-0) pointOneY = display.getScreenHeight()-0; // clip y 
+      if (pointTwoY > display.getScreenHeight()-0) pointTwoY = display.getScreenHeight()-0; // clip y 
+      
+      for (int pointOneYFor = (int)pointOneY; pointOneYFor < (int)pointTwoY; pointOneYFor++) {
+        pixels.pixel(pointOneXFor, pointOneYFor, 0);
+      }
     }
-
-
   }
-
-
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
