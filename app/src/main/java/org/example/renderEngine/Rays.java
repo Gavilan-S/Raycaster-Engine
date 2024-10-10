@@ -3,17 +3,15 @@ package org.example.renderEngine;
 import org.example.player.Player;
 
 public class Rays {
-  private Player player;
+  private Player player = new Player();
 
   private double raysStartX, raysStartY, raysFinalX, raysFinalY, raysAngle, raysDistance;
 
   public Rays() {
-    this.raysDistance = Math.sqrt(raysFinalX*raysFinalX+raysFinalY*raysFinalY);
-
-    this.player = new Player();
   }
 
   public void updateRays() {
+    raysDistance = Math.sqrt(raysFinalX*raysFinalX+raysFinalY*raysFinalY);
     player.movePlayer();
     raysStartX = player.getPlayerPositionX();
     raysStartY = player.getPlayerPositionY();
