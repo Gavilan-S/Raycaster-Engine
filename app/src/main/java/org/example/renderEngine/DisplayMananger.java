@@ -6,8 +6,8 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
 public class DisplayMananger {
-  private int width, height;
-  private String title;
+  private int width = 1024, height = 680;
+  private String title = "RayCast2D";
   private long display;
 
   public int frames;
@@ -18,7 +18,7 @@ public class DisplayMananger {
   public static float backgroundRed, backgroundGreen, backgroundBlue;
 
 
-  public DisplayMananger(int width, int height, String title) {
+  public DisplayMananger() {
     this.width = width;
     this.height = height;
     this.title = title;
@@ -130,5 +130,17 @@ public class DisplayMananger {
 
   public long getDisplay() {
     return display;
+  }
+
+  public int getWidth() {
+    return width;
+  }
+
+  public int getHeight() {
+    return height;
+  }
+
+  public String getTitle() {
+    return title;
   }
 }

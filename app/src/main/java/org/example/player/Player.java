@@ -2,37 +2,41 @@ package org.example.player;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import org.example.renderEngine.DisplayMananger;
 import org.example.renderEngine.Inputs;
 import org.lwjgl.glfw.GLFW;
 
 public class Player {
-  private float playerMouseX= (float) Inputs.getMouseX(), playerDeltaX, playerDeltaY, playerAngle, playerPositionX, playerPositionY; 
+  private DisplayMananger display = new DisplayMananger(); 
 
-  public Player(int posX, int posY) {
-    this.playerPositionX = posX;
-    this.playerPositionY = posY;
-    this.playerDeltaX = (float) Math.cos(playerAngle)*5; 
-    this.playerDeltaY = (float) Math.sin(playerAngle)*5; 
-    this.playerAngle = playerAngle; 
+  private float playerMouseX= (float) Inputs.getMouseX();
+  private float playerAngle;
+  private float playerPositionX = 300, playerPositionY = 300; 
+
+  private float playerDeltaX, playerDeltaY;
+
+  public Player() {
+    this.playerDeltaX = (float) Math.cos(Math.toRadians(playerAngle)) * 5; 
+    this.playerDeltaY = (float) Math.sin(Math.toRadians(playerAngle)) * 5;
   }
 
   public void drawPlayer() {
     // square for player
     glColor3f(1.0f, 1.0f, 0.0f);
-    glPointSize(10);
+    glPointSize(5);
     glBegin(GL_POINTS);
     glVertex2f(playerPositionX, playerPositionY);
     glEnd();
 
     // line for player vision
-    glLineWidth(3);
+    glLineWidth(2);
     glBegin(GL_LINES);
     glVertex2f(playerPositionX, playerPositionY);
-    glVertex2f(playerPositionX+playerDeltaX*5, playerPositionY+playerDeltaY*5);
+    glVertex2f(playerPositionX+playerDeltaX*4, playerPositionY+playerDeltaY*4);
     glEnd();
   }
 
-  public void movePlayer(int displayWidth, int displayHeight) {
+  public void movePlayer() {
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_W)) { 
       playerPositionY += playerDeltaY*0.1;
       playerPositionX += playerDeltaX*0.1;
@@ -44,39 +48,40 @@ public class Player {
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_D)) { 
-      playerPositionY += (Math.cos(playerAngle) * 0.5); 
-      playerPositionX -= (Math.sin(playerAngle) * 0.5);
+      playerPositionY -= Math.cos(Math.toRadians(playerAngle)) * 0.5; 
+      playerPositionX += Math.sin(Math.toRadians(playerAngle)) * 0.5;
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_A)) { 
-      playerPositionY -= (Math.cos(playerAngle) * 0.5); 
-      playerPositionX += (Math.sin(playerAngle) * 0.5);
+      playerPositionY += Math.cos(Math.toRadians(playerAngle)) * 0.5; 
+      playerPositionX -= Math.sin(Math.toRadians(playerAngle)) * 0.5;
     }
 
     // do not get out of the screen
-    playerPositionX = Math.max(0, Math.min(playerPositionX, displayWidth)); 
-    playerPositionY = Math.max(0, Math.min(playerPositionY, displayHeight));
+    playerPositionX = Math.max(0, Math.min(playerPositionX, display.getWidth())); 
+    playerPositionY = Math.max(0, Math.min(playerPositionY, display.getHeight()));
 
     // player vision move
     if (Inputs.getCursorMoved()) {
       if(Inputs.getMouseX() < playerMouseX) {
-        playerAngle -= 0.05;
+        playerAngle -= 2.86f;
         if (playerAngle < 0) {
-          playerAngle += 2 * Math.PI;
+          playerAngle += 360;
         }
-        playerDeltaX = (float) (Math.cos(playerAngle)*4);
-        playerDeltaY = (float) (Math.sin(playerAngle)*4);
+        playerDeltaX = (float) Math.cos(Math.toRadians(playerAngle)) * 4;
+        playerDeltaY = (float) Math.sin(Math.toRadians(playerAngle)) * 4;
 
         playerMouseX = (float) Inputs.getMouseX();
       }
 
       if(Inputs.getMouseX() > playerMouseX) {
-        playerAngle += 0.05;
-        if (playerAngle > 2*Math.PI) {
-          playerAngle -= 2 * Math.PI;
+        playerAngle += 2.86f;
+        if (playerAngle >= 360) {
+          playerAngle -= 360;
         }
-        playerDeltaX = (float) (Math.cos(playerAngle)*4);
-        playerDeltaY = (float) (Math.sin(playerAngle)*4);
+        playerDeltaX = (float) Math.cos(Math.toRadians(playerAngle)) * 4;
+        playerDeltaY = (float) Math.sin(Math.toRadians(playerAngle)) * 4;
+
 
         playerMouseX = (float) Inputs.getMouseX();
       }

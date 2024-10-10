@@ -2,7 +2,10 @@ package org.example.map;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import org.example.renderEngine.DisplayMananger;
+
 public class MapSectors {
+  private DisplayMananger display = new DisplayMananger();
   
   // sectors: <id> <index> <nWalls> <floor> <ceiling>
   private double[] sectors = {
@@ -46,17 +49,18 @@ public class MapSectors {
         if (actualSector == 0) {
           glColor3f(1.0f, 0.0f, 0.0f);
           glLineWidth(2);
+          glPointSize(100);
           glBegin(GL_LINES);
-          glVertex2d(sectorZero[x0]*200, sectorZero[y0]*200);
-          glVertex2d(sectorZero[x0+2]*200, sectorZero[y0+2]*200);
+          glVertex2d(sectorZero[x0]*100, sectorZero[y0]*100);
+          glVertex2d(sectorZero[x0+2]*100, sectorZero[y0+2]*100);
           glEnd();
         }
         if (actualSector == 1) {
           glColor3f(0.0f, 1.0f, 0.0f);
           glLineWidth(2);
           glBegin(GL_LINES);
-          glVertex2d(sectorOne[x0]*200, sectorOne[y0]*200);
-          glVertex2d(sectorOne[x0+2]*200, sectorOne[y0+2]*200);
+          glVertex2d(sectorOne[x0]*100, sectorOne[y0]*100);
+          glVertex2d(sectorOne[x0+2]*100, sectorOne[y0+2]*100);
           glEnd();
         }
         if (actualSector == 2) {
@@ -64,8 +68,8 @@ public class MapSectors {
           glLineWidth(2);
           glBegin(GL_LINES);
           glColor3f(0.0f, 0.0f, 1.0f);
-          glVertex2d(sectorTwo[x0]*200, sectorTwo[y0]*200);
-          glVertex2d(sectorTwo[x0+2]*200, sectorTwo[y0+2]*200);
+          glVertex2d(sectorTwo[x0]*100, sectorTwo[y0]*100);
+          glVertex2d(sectorTwo[x0+2]*100, sectorTwo[y0+2]*100);
           glEnd();
         }
         x0 += 5;
@@ -74,16 +78,28 @@ public class MapSectors {
     }
   }
 
-  public void lineline() {
-    glColor3f(0, 1, 0);
-    glLineWidth(20);
-    glBegin(GL_LINES);
-    glVertex2f(0.0f, 0.0f);  // Punto inicial (X1, Y1)
-    glVertex2f(25.5f, 53.5f);
+  public void mapPoints() {
+    glColor3f(1, 1, 1);
+    glPointSize(2);
+    glBegin(GL_POINTS);
+    for (int x = 0; x < display.getWidth(); x += 100) { 
+      for (int y = 0; y < display.getHeight(); y += 100) { 
+        glVertex2i(x, y); 
+      }
+    }
     glEnd();
+
+    glColor3f(0.7f, 0.7f, 0.7f);
+    glPointSize(1);
+    glBegin(GL_POINTS);
+    for (int x = 0; x < display.getWidth(); x += 100) { 
+      for (int y = 50; y < display.getHeight(); y += 100) { 
+        glVertex2i(x, y); 
+      }
+    }
+    glEnd();
+
+
+
   }
-
-
-
-
 }

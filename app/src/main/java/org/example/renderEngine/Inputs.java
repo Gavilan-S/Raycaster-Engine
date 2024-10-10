@@ -12,7 +12,6 @@ public class Inputs {
   private static boolean[] buttons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
   private static boolean cursorMoved = false;
   private double mouseLastX = -1;
-  private double mouseCurrentX;
 
   // start the input callbacks
   private GLFWKeyCallback keyboard;
