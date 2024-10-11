@@ -13,8 +13,6 @@ public class RaysDraw {
   }
 
   public void draw() {
-    rays.updateRays();
-
     for (int ray = 1; ray < 2; ray++) {
 
       glColor3f(1.0f, 1.0f, 1.0f);
@@ -25,5 +23,6 @@ public class RaysDraw {
       glEnd();
 
     }
+    rays.hitRays();
   }
 }
