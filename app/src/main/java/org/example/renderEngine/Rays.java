@@ -45,11 +45,7 @@ public class Rays {
 
         // point into limits
         if (raysMoveX >= Math.min(raysStartX, raysFinalX) && raysMoveX <= Math.max(raysStartX, raysFinalX)) {
-          // glColor3f(0.8f, 0.2f, 1.0f);  
-          // glPointSize(5);
-          // glBegin(GL_POINTS);
-          // glVertex2f(raysMoveX, raysMoveY);
-          // glEnd();
+          // drawPointsForRays(raysMoveX, raysMoveY);
         }
       }
     }
@@ -66,11 +62,7 @@ public class Rays {
 
         // point into limits
         if (raysMoveX >= Math.min(raysStartX, raysFinalX) && raysMoveX <= Math.max(raysStartX, raysFinalX)) {
-          // glColor3f(0.2f, 0.8f, 0.8f);  
-          // glPointSize(5);
-          // glBegin(GL_POINTS);
-          // glVertex2f(raysMoveX, raysMoveY);
-          // glEnd();
+          // drawPointsForRays(raysMoveX, raysMoveY);
         }
       }
     }
@@ -89,11 +81,7 @@ public class Rays {
 
         // point into limits
         if (raysMoveY >= Math.min(raysStartY, raysFinalY) && raysMoveY <= Math.max(raysStartY, raysFinalY)) {
-          // glColor3f(0.6f, 0.5f, 0.7f);
-          // glPointSize(5);
-          // glBegin(GL_POINTS);
-          // glVertex2f(raysMoveX, raysMoveY);
-          // glEnd();
+           drawPointsForRays(raysMoveX, raysMoveY);
         }
       }
     }
@@ -111,15 +99,19 @@ public class Rays {
 
         // point into limits
         if (raysMoveY >= Math.min(raysStartY, raysFinalY) && raysMoveY <= Math.max(raysStartY, raysFinalY)) {
-          // glColor3f(0.2f, 1.0f, 1.0f);
-          // glPointSize(5);
-          // glBegin(GL_POINTS);
-          // glVertex2f(raysMoveX, raysMoveY);
-          // glEnd();
+           drawPointsForRays(raysMoveX, raysMoveY);
         }
       }
     }
-    // ---------------------------------------------------------
+    // ------------------------------------------------------
+  }
+
+  public void drawPointsForRays(float raysMoveXForDraw, float raysMoveYForDraw) {
+    glColor3f(0.2f, 1.0f, 1.0f);
+    glPointSize(5);
+    glBegin(GL_POINTS);
+    glVertex2f(raysMoveXForDraw, raysMoveYForDraw);
+    glEnd();
   }
 
 
