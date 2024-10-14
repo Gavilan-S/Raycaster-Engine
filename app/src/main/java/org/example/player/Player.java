@@ -20,7 +20,7 @@ public class Player {
     this.playerDeltaY = (float) Math.sin(Math.toRadians(playerAngle)) * 5;
   }
 
-  public void drawPlayer() {
+ public void drawPlayer() {
     // square for player
     glColor3f(1.0f, 1.0f, 0.0f);
     glPointSize(5);
@@ -37,14 +37,15 @@ public class Player {
   }
 
   public void movePlayer() {
+    drawPlayer();
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_W)) { 
-      playerPositionY += playerDeltaY*0.1;
-      playerPositionX += playerDeltaX*0.1;
+      playerPositionY += playerDeltaY*0.3;
+      playerPositionX += playerDeltaX*0.3;
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_S)) { 
-      playerPositionY -= playerDeltaY*0.1;
-      playerPositionX -= playerDeltaX*0.1;
+      playerPositionY -= playerDeltaY*0.2;
+      playerPositionX -= playerDeltaX*0.2;
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_D)) { 
@@ -86,19 +87,11 @@ public class Player {
         playerMouseX = (float) Inputs.getMouseX();
       }
     }
-
   }
-  public float getPlayerPositionX() {
-    return playerPositionX;
-  }
+  public float getPlayerPositionX() { return playerPositionX; }
+  public float getPlayerPositionY() { return playerPositionY; }    
+  public float getPlayerAngle() { return playerAngle; }
 
-  public float getPlayerPositionY() {
-    return playerPositionY;
-  }    
-
-  public float getPlayerAngle() {
-    return playerAngle;
-  }
-
+  public void setPlayerAngle(float playerAngle) { this.playerAngle = playerAngle; }
 
 }

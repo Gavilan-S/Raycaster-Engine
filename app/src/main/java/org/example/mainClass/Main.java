@@ -4,6 +4,7 @@ import org.example.map.MapSectors;
 import org.example.player.Player;
 import org.example.renderEngine.DisplayMananger;
 import org.example.renderEngine.Inputs;
+import org.example.renderEngine.Rays;
 import org.example.renderEngine.RaysDraw;
 import org.lwjgl.glfw.GLFW;
 
@@ -15,7 +16,7 @@ public class Main implements Runnable {
   private DisplayMananger displayRayCast2D;
   private Player player;
   private RaysDraw raysDraw;
-
+  private Rays rays;
   private MapSectors mapSectors;
 
   // Thread help us to run the same code at the same time
@@ -31,6 +32,7 @@ public class Main implements Runnable {
     this.player = new Player();
     this.mapSectors = new MapSectors();
     this.raysDraw = new RaysDraw();
+    this.rays = new Rays();
   }
 
   public void init() {
@@ -68,10 +70,7 @@ public class Main implements Runnable {
     mapSectors.mapPoints();
     mapSectors.drawMapSectors();
 
-    player.drawPlayer();
-    player.movePlayer();
-
-    raysDraw.drawRays();
+    rays.updateRay();
 
     displayRayCast2D.swapBuffers(); 
 
