@@ -67,9 +67,11 @@ public class Main implements Runnable {
 
     mapSectors.mapPoints();
     mapSectors.drawMapSectors();
+
     player.drawPlayer();
     player.movePlayer();
-    raysDraw.draw();
+
+    raysDraw.drawRays();
 
     displayRayCast2D.swapBuffers(); 
 

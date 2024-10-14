@@ -6,7 +6,7 @@ import org.example.player.Player;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Rays {
-  private Player player = new Player();
+  private Player player = new Player(); 
   private MapSectors map = new MapSectors();
 
   private double raysStartX, raysStartY, raysFinalX, raysFinalY, raysAngle, raysDistance;
@@ -14,8 +14,7 @@ public class Rays {
   public Rays() {
   }
 
-  public void updateRays() {
-    raysDistance = Math.sqrt(raysFinalX*raysFinalX+raysFinalY*raysFinalY);
+  public void updateRay() {
 
     player.movePlayer();
     raysStartX = player.getPlayerPositionX();
@@ -24,16 +23,23 @@ public class Rays {
     double rayLength = 800;
     raysFinalX = player.getPlayerPositionX() + Math.cos(Math.toRadians(player.getPlayerAngle())) * rayLength;
     raysFinalY = player.getPlayerPositionY() + Math.sin(Math.toRadians(player.getPlayerAngle())) * rayLength;
-
-      //double scale = (400 - player.getPlayerPositionY()) / (raysFinalY - player.getPlayerPositionY());
-
-      //raysFinalX = player.getPlayerPositionX() + (raysFinalX - player.getPlayerPositionX()) * scale;
   }
 
 
-  public void hitRays() {
-    updateRays();
+  public void hitRay() {
+    updateRay();
+
     // horizontal lines
+    detectHorizontalCollisions();
+    // vertical lines
+    detectVerticalCollisions();
+    // diagonal lines
+    detectDiagonalCollisions();
+
+    raysDistance = Math.sqrt(raysFinalX*raysFinalX+raysFinalY*raysFinalY);
+  }
+
+  private void detectHorizontalCollisions() {
     // player looking y up 
     if ( player.getPlayerAngle() < 180 && player.getPlayerAngle() > 0 ) {
       for ( float raysMoveY = (float) raysStartY; raysMoveY < raysFinalY; raysMoveY += 50 ) {
@@ -43,21 +49,21 @@ public class Rays {
 
         // x move to draw
         float raysDeltaX = (float)(raysMoveY - raysStartY) /
-                           (float) Math.tan(Math.toRadians(player.getPlayerAngle()));
+      (float) Math.tan(Math.toRadians(player.getPlayerAngle()));
         float raysMoveX = (float)raysStartX + raysDeltaX;
 
         for (int yMoveMap = 1; yMoveMap < map.getSectorZero().length; yMoveMap += 5) {
           if (raysMoveY == map.getSectorZero()[yMoveMap]*100 &&
-              map.getSectorZero()[yMoveMap] == map.getSectorZero()[yMoveMap+2] &&
-              raysMoveX >= map.getSectorZero()[yMoveMap-1]*100 && 
-              raysMoveX <= map.getSectorZero()[yMoveMap+1]*100) {
+          map.getSectorZero()[yMoveMap] == map.getSectorZero()[yMoveMap+2] &&
+          raysMoveX >= map.getSectorZero()[yMoveMap-1]*100 && 
+          raysMoveX <= map.getSectorZero()[yMoveMap+1]*100) {
             raysFinalX = raysMoveX;
             raysFinalY = raysMoveY;
           }
         }
         // point into limits
         if (raysMoveX >= Math.min(raysStartX, raysFinalX) && raysMoveX <= Math.max(raysStartX, raysFinalX)) {
-           // drawPointsForRays(raysMoveX, raysMoveY);
+          // drawPointsForRays(raysMoveX, raysMoveY);
         }
       }
     }
@@ -74,9 +80,9 @@ public class Rays {
 
         for (int yMoveMap = 1; yMoveMap < map.getSectorZero().length; yMoveMap += 5) {
           if (raysMoveY == map.getSectorZero()[yMoveMap]*100 && 
-              map.getSectorZero()[yMoveMap] == map.getSectorZero()[yMoveMap+2] &&
-              raysMoveX >= map.getSectorZero()[yMoveMap-1]*100 && 
-              raysMoveX <= map.getSectorZero()[yMoveMap+1]*100) {
+          map.getSectorZero()[yMoveMap] == map.getSectorZero()[yMoveMap+2] &&
+          raysMoveX >= map.getSectorZero()[yMoveMap-1]*100 && 
+          raysMoveX <= map.getSectorZero()[yMoveMap+1]*100) {
             raysFinalX = raysMoveX;
             raysFinalY = raysMoveY;
           }
@@ -88,8 +94,9 @@ public class Rays {
         }
       }
     }
-    // ------------------------------------------
-    // vertical lines
+  }
+
+  private void detectVerticalCollisions() {
     // player looking right (angle near 0)
     if (player.getPlayerAngle() < 90 || player.getPlayerAngle() > 270) {
       for (float raysMoveX = (float) raysStartX; raysMoveX < raysFinalX; raysMoveX += 50) {
@@ -103,19 +110,16 @@ public class Rays {
 
         for (int xMoveMap = 0; xMoveMap < map.getSectorZero().length; xMoveMap += 5) {
           if (raysMoveX == map.getSectorZero()[xMoveMap]*100 && 
-              map.getSectorZero()[xMoveMap] == map.getSectorZero()[xMoveMap+2] &&
-              raysMoveY >= map.getSectorZero()[xMoveMap+1]*100 && 
-              raysMoveY <= map.getSectorZero()[xMoveMap+3]*100) {
+          map.getSectorZero()[xMoveMap] == map.getSectorZero()[xMoveMap+2] &&
+          raysMoveY >= map.getSectorZero()[xMoveMap+1]*100 && 
+          raysMoveY <= map.getSectorZero()[xMoveMap+3]*100) {
             raysFinalX = raysMoveX;
             raysFinalY = raysMoveY;
           }
         }
-
-
-
         // point into limits
         if (raysMoveY >= Math.min(raysStartY, raysFinalY) && raysMoveY <= Math.max(raysStartY, raysFinalY)) {
-           // drawPointsForRays(raysMoveX, raysMoveY);
+          // drawPointsForRays(raysMoveX, raysMoveY);
         }
       }
     }
@@ -133,28 +137,27 @@ public class Rays {
 
         for (int xMoveMap = 0; xMoveMap < map.getSectorZero().length; xMoveMap += 5) {
           if (raysMoveX == map.getSectorZero()[xMoveMap]*100 && 
-              map.getSectorZero()[xMoveMap] == map.getSectorZero()[xMoveMap+2] &&
-              raysMoveY >= map.getSectorZero()[xMoveMap+1]*100 && 
-              raysMoveY <= map.getSectorZero()[xMoveMap+3]*100) {
+          map.getSectorZero()[xMoveMap] == map.getSectorZero()[xMoveMap+2] &&
+          raysMoveY >= map.getSectorZero()[xMoveMap+1]*100 && 
+          raysMoveY <= map.getSectorZero()[xMoveMap+3]*100) {
             raysFinalX = raysMoveX;
             raysFinalY = raysMoveY;
           }
         }
-
         // point into limits
         if (raysMoveY >= Math.min(raysStartY, raysFinalY) && raysMoveY <= Math.max(raysStartY, raysFinalY)) {
-           // drawPointsForRays(raysMoveX, raysMoveY);
+          // drawPointsForRays(raysMoveX, raysMoveY);
         }
       }
     }
-    // ------------------------------------------------------
-    // diagonal lines
+  }
 
+  private void detectDiagonalCollisions() {
     float nearestDistance = Float.MAX_VALUE;
 
     for (int diagonalMoveMap = 0; diagonalMoveMap < map.getSectorZero().length; diagonalMoveMap += 5) {
       float mSlope = (float)((map.getSectorZero()[diagonalMoveMap+3]-map.getSectorZero()[diagonalMoveMap+1])/
-                             (map.getSectorZero()[diagonalMoveMap+2]-map.getSectorZero()[diagonalMoveMap]));
+    (map.getSectorZero()[diagonalMoveMap+2]-map.getSectorZero()[diagonalMoveMap]));
 
       float bIntercept = (float)(map.getSectorZero()[diagonalMoveMap+1]-mSlope*map.getSectorZero()[diagonalMoveMap])*100;
 
@@ -198,23 +201,9 @@ public class Rays {
     glEnd();
   }
 
-
-  public Player getPlayer() {
-    return player;
-  }
-  public double getRaysStartX() {
-    return raysStartX;
-  }
-  public double getRaysStartY() {
-    return raysStartY;
-  }
-  public double getRaysFinalX() {
-    return raysFinalX;
-  }
-  public double getRaysFinalY() {
-    return raysFinalY;
-  }
-  public double getRaysDistance() {
-    return raysDistance;
-  }
+  public double getRaysStartX() { return raysStartX; }
+  public double getRaysStartY() { return raysStartY; }
+  public double getRaysFinalX() { return raysFinalX; }
+  public double getRaysFinalY() { return raysFinalY; }
+  public double getRaysDistance() { return raysDistance; }
 }
