@@ -98,8 +98,21 @@ public class MapSectors {
       }
     }
     glEnd();
+  }
 
+  public double[] getSectors() {
+    return sectors;
+  }
 
+  public double[] getSectorZero() {
+    return sectorZero;
+  }
 
+  public double[] getSectorOne() {
+    return sectorOne;
+  }
+
+  public double[] getSectorTwo() {
+    return sectorTwo;
   }
 }
