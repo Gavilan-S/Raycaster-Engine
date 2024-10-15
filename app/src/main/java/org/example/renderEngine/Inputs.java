@@ -12,7 +12,7 @@ public class Inputs {
   private static boolean[] buttons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
   private static boolean cursorMoved = false;
 
-  private double mouseLastX = -1, mouseLastY = -1;
+  private double mouseLastX = -1;
 
   // start the input callbacks
   private GLFWKeyCallback keyboard;
@@ -65,33 +65,13 @@ public class Inputs {
     mouseButtons.free();
   }
 
-  public static boolean getCursorMoved() {
-    return cursorMoved;
-  }
+  public static boolean getCursorMoved() { return cursorMoved; }
+  public static double getMouseX() { return mouseX; }
+  public static double getMouseY() { return mouseY; }
+  public GLFWKeyCallback getKeyboardCallBack() { return keyboard; }
+  public static GLFWCursorPosCallback getMouseMoveCallBack() { return mouseMove; }
+  public GLFWMouseButtonCallback getMouseButtonsCallBack() { return mouseButtons; }
 
-  public static void setCursorMoved(boolean cursorMoved) {
-    Inputs.cursorMoved = cursorMoved;
-  }
-
-  public static double getMouseX() {
-    return mouseX;
-  }
-
-  public static double getMouseY() {
-    return mouseY;
-  }
-
-  public GLFWKeyCallback getKeyboardCallBack() {
-    return keyboard;
-  }
-
-  public static GLFWCursorPosCallback getMouseMoveCallBack() {
-    return mouseMove;
-  }
-
-  public GLFWMouseButtonCallback getMouseButtonsCallBack() {
-    return mouseButtons;
-  }
-
+  public static void setCursorMoved(boolean cursorMoved) { Inputs.cursorMoved = cursorMoved; }
 
 }

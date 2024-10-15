@@ -6,16 +6,9 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
 public class DisplayMananger {
-  private String title = "Render Engine";
+  private int width = 1024, height = 680;
+  private String title = "RayCast2D";
   private long display;
-
-  private int resolution = 1;// 0=160*120, 1=360*240, 4*640*480
-  private int width = 160*resolution, height = 120*resolution;
-  private int widthTwo = width/2, heightTwo = height/2;
-
-  private float pixelScale = 6/resolution;
-  private int glWidth = (int)(width*pixelScale);
-  private int glHeight = (int)(height*pixelScale);
 
   public int frames;
   public static long time;
@@ -26,10 +19,8 @@ public class DisplayMananger {
 
 
   public DisplayMananger() {
-    this.glWidth= glWidth;
-    this.glHeight = glHeight;
-    this.resolution = resolution;
-    this.pixelScale = pixelScale;
+    this.width = width;
+    this.height = height;
     this.title = title;
   }
 
@@ -45,7 +36,7 @@ public class DisplayMananger {
     GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_FALSE);
 
     // args4: fullscreen or other. args5: multiple monitors
-    display = GLFW.glfwCreateWindow(glWidth, glHeight, title, 0, 0);
+    display = GLFW.glfwCreateWindow(width, height, title, 0, 0);
 
     // display is a long
     if (display == 0) {
@@ -58,7 +49,7 @@ public class DisplayMananger {
     // 2: set position
     // 3: (set SwapInterval) at this moment all the render operations will be aplied to the window
     GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
-    GLFW.glfwSetWindowPos(display, (vidMode.width() - glWidth) / 2,  (vidMode.height() - glHeight) / 2);
+    GLFW.glfwSetWindowPos(display, (vidMode.width() - width) / 2,  (vidMode.height() - height) / 2);
     GLFW.glfwMakeContextCurrent(display);
 
     // garantiza que tu aplicación sepa qué funcionalidades están disponibles en el entorno de ejecución actual
@@ -81,15 +72,14 @@ public class DisplayMananger {
     GL.createCapabilities();
 
     // draw cords 
-    GL11.glViewport(0, 0, glWidth, glHeight);
+    GL11.glViewport(0, 0, width, height);
 
     // 1. how to proyect cords
     // 2. new []
     // 3. change 0,0
     GL11.glMatrixMode(GL11.GL_PROJECTION);
     GL11.glLoadIdentity();
-    GL11.glPointSize(pixelScale);
-    GL11.glOrtho(0, glWidth, 0, glHeight, -1, 1); // Invertir el eje Y para que (0,0) esté en la esquina inferior izquierda
+    GL11.glOrtho(0, width, 0, height, -1, 1); // Invertir el eje Y para que (0,0) esté en la esquina inferior izquierda
 
   }
 
@@ -136,40 +126,8 @@ public class DisplayMananger {
 
   }
 
-  public long getDisplay() {
-    return display;
-  }
-
-  public int getScreenWidth() {
-    return width;
-  }
-
-  public int getScreenHeight() {
-    return height;
-  }
-
-  public int getScreenGLWidth() {
-    return glWidth;
-  }
-
-  public int getScreenGLHeight() {
-    return glHeight;
-  }
-
-  public int getScreenWidthTwo() {
-    return widthTwo;
-  }
-
-  public int getScreenHeightTwo() {
-    return heightTwo;
-  }
-
-  public int getResolution() {
-    return resolution;
-  }
-  
-  public double getPixelScale() {
-    return pixelScale;
-  }
-
+  public long getDisplay() { return display; }
+  public int getWidth() { return width; }
+  public int getHeight() { return height; }
+  public String getTitle() { return title; }
 }

@@ -1,10 +1,11 @@
 package org.example.mainClass;
 
+import org.example.map.MapSectors;
 import org.example.player.Player;
 import org.example.renderEngine.DisplayMananger;
-import org.example.renderEngine.Draw3D;
 import org.example.renderEngine.Inputs;
-import org.example.renderEngine.Pixels;
+import org.example.renderEngine.Rays;
+import org.example.renderEngine.RaysDraw;
 import org.lwjgl.glfw.GLFW;
 
 import org.lwjgl.opengl.GL11;
@@ -12,11 +13,11 @@ import org.lwjgl.opengl.GL11;
 // basic stuff: start (for thread), init (create window) <- run <- (init, update, render)
 
 public class Main implements Runnable {
-
-  private DisplayMananger display;
+  private DisplayMananger displayRayCast2D;
   private Player player;
-  private Pixels pixels;
-  private Draw3D draw3d;
+  private RaysDraw raysDraw;
+  private Rays rays;
+  private MapSectors mapSectors;
 
   // Thread help us to run the same code at the same time
   public Thread threadOne;
@@ -28,62 +29,53 @@ public class Main implements Runnable {
     threadOne = new Thread(this, "first thread");
     threadOne.start();
 
-    this.player = new Player(70, -110, 20, 0, 0);
-    this.pixels = new Pixels();
-    this.draw3d = new Draw3D();
+    this.player = new Player();
+    this.mapSectors = new MapSectors();
+    this.raysDraw = new RaysDraw();
+    this.rays = new Rays();
   }
 
   public void init() {
     System.out.println("init new game");
     // crate the window with DisplayMananger class
-    // displayRayCast2D = new DisplayMananger(WIDTHRAYCAST2D, HEIGHTRAYCAST2D, "RayCasting2D");
-    // displayRayCast2D.createDisplay();
+    displayRayCast2D = new DisplayMananger();
+    displayRayCast2D.createDisplay();
 
-    display = new DisplayMananger();
-    display.createDisplay();
+
   }
 
   public void run() {
     init();
     System.out.println("runnig new game");
     // while is not close -> update, render
-    while (!display.closeDisplay()) {
+    while (!displayRayCast2D.closeDisplay()) {
       update();
       render();
       // exit while if ESCAPE is press
-      if (Inputs.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
-        System.out.println("Exit Render Engine");
-        return;
-      }
+      if (Inputs.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) return;
     }
-    display.destroyFree();
+    displayRayCast2D.destroyFree();
   }
 
   private void update() {
-    display.updateDisplay();
+    displayRayCast2D.updateDisplay();
   }
 
   private void render() {
     // render 2D
-    GLFW.glfwMakeContextCurrent(display.getDisplay());
+    GLFW.glfwMakeContextCurrent(displayRayCast2D.getDisplay());
+    GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-    GL11.glBegin(GL11.GL_POINTS);
-    pixels.clearBackground();
-    draw3d.draw3d();
-    GL11.glEnd();
+    mapSectors.mapPoints();
+    mapSectors.drawMapSectors();
 
-    player.movePlayer(display.getScreenWidth(), display.getScreenHeight());
+    rays.updateRay();
 
-    display.swapBuffers(); 
-
-    // render 3D
-    //GLFW.glfwMakeContextCurrent(displayGame3D.getDisplay());
-    // GL11.glClearColor(0.48f, 0.50f, 0.52f, 1.0f);
-    // GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+    displayRayCast2D.swapBuffers(); 
 
   }
-
+  
   public static void main(String[] args) {
     new Main().start();
   }
