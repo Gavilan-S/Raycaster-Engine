@@ -50,11 +50,11 @@ public class Rays {
 
 
   private void hitRay(double currentRayAngle) {
-    // diagonal lines
-    detectDiagonalCollisions(currentRayAngle, nearestDistance);
-
     // horizontal lines
     detectHorizontalCollisions(currentRayAngle, nearestDistance);
+
+    // diagonal lines
+    detectDiagonalCollisions(currentRayAngle, nearestDistance);
 
     // vertical lines
     detectVerticalCollisions(currentRayAngle, nearestDistance);
@@ -93,7 +93,7 @@ public class Rays {
       }
     }
     // player looking y down
-    if ( player.getPlayerAngle() > 180 && player.getPlayerAngle() < 360 ) {
+    if (currentRayAngle > 180 && currentRayAngle < 360) {
       for ( float raysMoveY = (float) raysStartY; raysMoveY > raysFinalY; raysMoveY -= 50 ) {
         if ( raysMoveY % 50 != 0 ) {
           raysMoveY = (float)Math.floor(raysMoveY/50.0f)*50;
@@ -124,7 +124,7 @@ public class Rays {
 
   private void detectVerticalCollisions(double currentRayAngle, float nearestDistance) {
     // player looking right (angle near 0)
-    if (player.getPlayerAngle() < 90 || player.getPlayerAngle() > 270) {
+    if (currentRayAngle < 90 || currentRayAngle > 270) {
       for (float raysMoveX = (float) raysStartX; raysMoveX < raysFinalX; raysMoveX += 50) {
         if (raysMoveX % 50 != 0) {
           raysMoveX = (float)Math.ceil(raysMoveX / 50.0f) * 50;
@@ -153,7 +153,7 @@ public class Rays {
     }
 
     // player looking left (angle between 90 and 270)
-    if (player.getPlayerAngle() > 90 && player.getPlayerAngle() < 270) {
+    if (currentRayAngle > 90 && currentRayAngle < 270) {
       for (float raysMoveX = (float) raysStartX; raysMoveX > raysFinalX; raysMoveX -= 50) {
         if (raysMoveX % 50 != 0) {
           raysMoveX = (float)Math.floor(raysMoveX / 50.0f) * 50;
@@ -183,7 +183,6 @@ public class Rays {
   }
 
   private void detectDiagonalCollisions(double currentRayAngle, float nearestDistance) {
-
     for (int diagonalMoveMap = 0; diagonalMoveMap < map.getSectorZero().length; diagonalMoveMap += 5) {
 
       float mSlope = (float)((map.getSectorZero()[diagonalMoveMap+3]-map.getSectorZero()[diagonalMoveMap+1])/
@@ -195,74 +194,41 @@ public class Rays {
 
       float denominator = (float)(Math.sin(Math.toRadians(currentRayAngle)) - mSlope * Math.cos(Math.toRadians(currentRayAngle)));
       if (Math.abs(denominator) > 1e-6) {
-
         float tScale = (mSlope * player.getPlayerPositionX() - mSlope * xDelta + bIntercept - player.getPlayerPositionY()) / denominator;
         if (tScale > 0) {
           float raysXIntercept = (float)(player.getPlayerPositionX() + tScale * Math.cos(Math.toRadians(currentRayAngle)));
           float raysYIntercept = (float)(player.getPlayerPositionY() + tScale * Math.sin(Math.toRadians(currentRayAngle)));
 
+          // check for horizontal or vertical walls
+          if (map.getSectorZero()[diagonalMoveMap]*100 != map.getSectorZero()[diagonalMoveMap+2]*100 ||
+          map.getSectorZero()[diagonalMoveMap+1]*100 != map.getSectorZero()[diagonalMoveMap+3]*100) { 
           // to do not let ray get out of the bounds
-          float tolerance = 2.0f;
-          if (raysXIntercept >= Math.min(map.getSectorZero()[diagonalMoveMap]*100, map.getSectorZero()[diagonalMoveMap+2]*100) - tolerance &&
-          raysXIntercept <= Math.max(map.getSectorZero()[diagonalMoveMap]*100, map.getSectorZero()[diagonalMoveMap+2]*100) + tolerance &&
-          raysYIntercept >= Math.min(map.getSectorZero()[diagonalMoveMap+1]*100, map.getSectorZero()[diagonalMoveMap+3]*100) - tolerance &&
-          raysYIntercept <= Math.max(map.getSectorZero()[diagonalMoveMap+1]*100, map.getSectorZero()[diagonalMoveMap+3]*100) + tolerance ||
-          distanceToPoint(raysXIntercept, raysYIntercept, (float)map.getSectorZero()[diagonalMoveMap]*100,
-          (float)map.getSectorZero()[diagonalMoveMap+1]*100) 
-          <= tolerance ||
-          distanceToPoint(raysXIntercept, raysYIntercept, (float)map.getSectorZero()[diagonalMoveMap+2]*100, 
-          (float)map.getSectorZero()[diagonalMoveMap+3]*100) 
-          <= tolerance) {
+            float tolerance = 5.0f;
+            if (raysXIntercept >= Math.min(map.getSectorZero()[diagonalMoveMap]*100, map.getSectorZero()[diagonalMoveMap+2]*100) - tolerance &&
+            raysXIntercept <= Math.max(map.getSectorZero()[diagonalMoveMap]*100, map.getSectorZero()[diagonalMoveMap+2]*100) + tolerance &&
+            raysYIntercept >= Math.min(map.getSectorZero()[diagonalMoveMap+1]*100, map.getSectorZero()[diagonalMoveMap+3]*100) - tolerance &&
+            raysYIntercept <= Math.max(map.getSectorZero()[diagonalMoveMap+1]*100, map.getSectorZero()[diagonalMoveMap+3]*100) + tolerance ||
+            distanceToPoint(raysXIntercept, raysYIntercept, (float)map.getSectorZero()[diagonalMoveMap]*100,
+            (float)map.getSectorZero()[diagonalMoveMap+1]*100) 
+            <= tolerance ||
+            distanceToPoint(raysXIntercept, raysYIntercept, (float)map.getSectorZero()[diagonalMoveMap+2]*100, 
+            (float)map.getSectorZero()[diagonalMoveMap+3]*100) 
+            <= tolerance) {
 
-            raysDistance = distanceToPoint(raysXIntercept, raysYIntercept, player.getPlayerPositionX(), player.getPlayerPositionY());
+              raysDistance = distanceToPoint(raysXIntercept, raysYIntercept, player.getPlayerPositionX(), player.getPlayerPositionY());
 
-            if (raysDistance < nearestDistance) {
-              raysFinalX = raysXIntercept;
-              raysFinalY = raysYIntercept;
+              if (raysDistance < nearestDistance) {
+                raysFinalX = raysXIntercept;
+                raysFinalY = raysYIntercept;
 
-              nearestDistance = raysDistance;
+                nearestDistance = raysDistance;
+              }
             }
           }
         }
       }
     }
   }
-
-  public void setPlayer(Player player) {
-	this.player = player;
-}
-
-public void setMap(MapSectors map) {
-	this.map = map;
-}
-
-public void setRaysStartX(double raysStartX) {
-	this.raysStartX = raysStartX;
-}
-
-public void setRaysStartY(double raysStartY) {
-	this.raysStartY = raysStartY;
-}
-
-public void setRaysFinalX(double raysFinalX) {
-	this.raysFinalX = raysFinalX;
-}
-
-public void setRaysFinalY(double raysFinalY) {
-	this.raysFinalY = raysFinalY;
-}
-
-public void setRayAngle(double rayAngle) {
-	this.rayAngle = rayAngle;
-}
-
-public void setRaysDistance(float raysDistance) {
-	this.raysDistance = raysDistance;
-}
-
-public void setNearestDistance(float nearestDistance) {
-	this.nearestDistance = nearestDistance;
-}
 
 private float distanceToPoint(float x1, float y1, float x2, float y2) {
     // sqrt ((x2-x1)^2+(y2-y1)^2)
