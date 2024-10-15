@@ -228,42 +228,6 @@ public class Rays {
     }
   }
 
-  public void setPlayer(Player player) {
-	this.player = player;
-}
-
-public void setMap(MapSectors map) {
-	this.map = map;
-}
-
-public void setRaysStartX(double raysStartX) {
-	this.raysStartX = raysStartX;
-}
-
-public void setRaysStartY(double raysStartY) {
-	this.raysStartY = raysStartY;
-}
-
-public void setRaysFinalX(double raysFinalX) {
-	this.raysFinalX = raysFinalX;
-}
-
-public void setRaysFinalY(double raysFinalY) {
-	this.raysFinalY = raysFinalY;
-}
-
-public void setRayAngle(double rayAngle) {
-	this.rayAngle = rayAngle;
-}
-
-public void setRaysDistance(float raysDistance) {
-	this.raysDistance = raysDistance;
-}
-
-public void setNearestDistance(float nearestDistance) {
-	this.nearestDistance = nearestDistance;
-}
-
 private float distanceToPoint(float x1, float y1, float x2, float y2) {
     // sqrt ((x2-x1)^2+(y2-y1)^2)
     return (float)Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
