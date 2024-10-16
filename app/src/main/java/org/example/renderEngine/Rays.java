@@ -24,7 +24,7 @@ public class Rays {
     player.movePlayer();
     player.drawPlayer();
 
-    int nOfRays = 500;
+    int nOfRays = 1;
     float FOV =  60.0f;
 
     double angleBetweenRays = FOV / nOfRays;
@@ -43,12 +43,10 @@ public class Rays {
       rayFinalX = player.getPlayerPositionX() + Math.cos(Math.toRadians(rayAngle)) * rayLength;
       rayFinalY = player.getPlayerPositionY() + Math.sin(Math.toRadians(rayAngle)) * rayLength;
 
-      float nearestDistance = Float.MAX_VALUE;
+      DistanceHolder nearestDistance = new DistanceHolder(Float.MAX_VALUE);
       hitRay(rayAngle, nearestDistance);
 
-      if(rayDistance < nearestDistance) {
-        raysDistanceList.add(rayDistance);
-      }
+      raysDistanceList.add(rayDistance);
 
       glColor3f(1.0f, 1.0f, 1.0f);
       glLineWidth(1);
@@ -60,18 +58,18 @@ public class Rays {
   }
 
 
-  private void hitRay(double currentRayAngle, float nearestDistance) {
-    // horizontal lines
-    detectHorizontalCollisions(currentRayAngle, nearestDistance);
-
+  private void hitRay(double currentRayAngle, DistanceHolder nearestDistance) {
     // diagonal lines
     detectDiagonalCollisions(currentRayAngle, nearestDistance);
+
+    // horizontal lines
+    detectHorizontalCollisions(currentRayAngle, nearestDistance);
 
     // vertical lines
     detectVerticalCollisions(currentRayAngle, nearestDistance);
   }
 
-  private void detectHorizontalCollisions(double currentRayAngle, float nearestDistance) {
+  private void detectHorizontalCollisions(double currentRayAngle, DistanceHolder nearestDistance) {
     // player looking y up 
     if (currentRayAngle < 180 && currentRayAngle > 0 ) {
       for (float raysMoveY = (float) rayStartY; raysMoveY < rayFinalY; raysMoveY += 50) {
@@ -92,13 +90,11 @@ public class Rays {
 
             rayDistance = distanceToPoint(raysMoveX, raysMoveY, player.getPlayerPositionX(), player.getPlayerPositionY());
 
-            if (rayDistance < nearestDistance) {
+            if (rayDistance < nearestDistance.getValue()) {
               rayFinalX = raysMoveX;
               rayFinalY = raysMoveY;
-              nearestDistance = rayDistance;
+              nearestDistance.setValue(rayDistance);
             }
-
-
           }
         }
       }
@@ -122,10 +118,10 @@ public class Rays {
 
             rayDistance = distanceToPoint(raysMoveX, raysMoveY, player.getPlayerPositionX(), player.getPlayerPositionY());
 
-            if (rayDistance < nearestDistance) {
+            if (rayDistance < nearestDistance.getValue()) {
               rayFinalX = raysMoveX;
               rayFinalY = raysMoveY;
-              nearestDistance = rayDistance;
+              nearestDistance.setValue(rayDistance);
             }
           }
         }
@@ -133,7 +129,7 @@ public class Rays {
     }
   }
 
-  private void detectVerticalCollisions(double currentRayAngle, float nearestDistance) {
+  private void detectVerticalCollisions(double currentRayAngle, DistanceHolder nearestDistance) {
     // player looking right (angle near 0)
     if (currentRayAngle < 90 || currentRayAngle > 270) {
       for (float raysMoveX = (float) rayStartX; raysMoveX < rayFinalX; raysMoveX += 50) {
@@ -153,10 +149,10 @@ public class Rays {
 
             rayDistance = distanceToPoint(raysMoveX, raysMoveY, player.getPlayerPositionX(), player.getPlayerPositionY());
 
-            if (rayDistance < nearestDistance) {
+            if (rayDistance < nearestDistance.getValue()) {
               rayFinalX = raysMoveX;
               rayFinalY = raysMoveY;
-              nearestDistance = rayDistance;
+              nearestDistance.setValue(rayDistance);
             }
           }
         }
@@ -182,10 +178,10 @@ public class Rays {
 
             rayDistance = distanceToPoint(raysMoveX, raysMoveY, player.getPlayerPositionX(), player.getPlayerPositionY());
 
-            if (rayDistance < nearestDistance) {
+            if (rayDistance < nearestDistance.getValue()) {
               rayFinalX = raysMoveX;
               rayFinalY = raysMoveY;
-              nearestDistance = rayDistance;
+              nearestDistance.setValue(rayDistance);
             }
           }
         }
@@ -193,7 +189,7 @@ public class Rays {
     }
   }
 
-  private void detectDiagonalCollisions(double currentRayAngle, float nearestDistance) {
+  private void detectDiagonalCollisions(double currentRayAngle, DistanceHolder nearestDistance) {
     for (int diagonalMoveMap = 0; diagonalMoveMap < map.getSectorZero().length; diagonalMoveMap += 5) {
 
       float mSlope = (float)((map.getSectorZero()[diagonalMoveMap+3]-map.getSectorZero()[diagonalMoveMap+1])/
@@ -228,11 +224,11 @@ public class Rays {
 
               rayDistance = distanceToPoint(raysXIntercept, raysYIntercept, player.getPlayerPositionX(), player.getPlayerPositionY());
 
-              if (rayDistance < nearestDistance) {
+              if (rayDistance < nearestDistance.getValue()) {
                 rayFinalX = raysXIntercept;
                 rayFinalY = raysYIntercept;
 
-                nearestDistance = rayDistance;
+                nearestDistance.setValue(rayDistance);
               }
             }
           }
@@ -251,5 +247,6 @@ private float distanceToPoint(float x1, float y1, float x2, float y2) {
   public double getRayFinalX() { return rayFinalX; }
   public double getRayFinalY() { return rayFinalY; }
   public double getRayDistance() { return rayDistance; }
+
   public List<Float> getRaysDistanceList() { return raysDistanceList; }
 }
