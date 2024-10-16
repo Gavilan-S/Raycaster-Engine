@@ -39,23 +39,23 @@ public class Player {
   public void movePlayer() {
     drawPlayer();
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_W)) { 
-      playerPositionY += playerDeltaY*0.3;
-      playerPositionX += playerDeltaX*0.3;
+      playerPositionY += playerDeltaY*0.7;
+      playerPositionX += playerDeltaX*0.7;
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_S)) { 
-      playerPositionY -= playerDeltaY*0.2;
-      playerPositionX -= playerDeltaX*0.2;
+      playerPositionY -= playerDeltaY*0.5;
+      playerPositionX -= playerDeltaX*0.5;
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_D)) { 
-      playerPositionY -= Math.cos(Math.toRadians(playerAngle)) * 0.5; 
-      playerPositionX += Math.sin(Math.toRadians(playerAngle)) * 0.5;
+      playerPositionY -= Math.cos(Math.toRadians(playerAngle))*3; 
+      playerPositionX += Math.sin(Math.toRadians(playerAngle))*3;
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_A)) { 
-      playerPositionY += Math.cos(Math.toRadians(playerAngle)) * 0.5; 
-      playerPositionX -= Math.sin(Math.toRadians(playerAngle)) * 0.5;
+      playerPositionY += Math.cos(Math.toRadians(playerAngle))*3; 
+      playerPositionX -= Math.sin(Math.toRadians(playerAngle))*3;
     }
 
     // do not get out of the screen
