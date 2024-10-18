@@ -4,8 +4,7 @@ import org.example.map.MapSectors;
 import org.example.player.Player;
 import org.example.renderEngine.DisplayMananger;
 import org.example.renderEngine.Inputs;
-import org.example.renderEngine.Rays;
-import org.example.renderEngine.RaysDraw;
+import org.example.renderEngine.RayCastingSystem;
 import org.lwjgl.glfw.GLFW;
 
 import org.lwjgl.opengl.GL11;
@@ -15,9 +14,8 @@ import org.lwjgl.opengl.GL11;
 public class Main implements Runnable {
   private DisplayMananger displayRayCast2D;
   private Player player;
-  private RaysDraw raysDraw;
-  private Rays rays;
   private MapSectors mapSectors;
+  private RayCastingSystem rayCastingSystem;
 
   // Thread help us to run the same code at the same time
   public Thread threadOne;
@@ -31,8 +29,7 @@ public class Main implements Runnable {
 
     this.player = new Player();
     this.mapSectors = new MapSectors();
-    this.raysDraw = new RaysDraw();
-    this.rays = new Rays();
+    this.rayCastingSystem = new RayCastingSystem(player, mapSectors);
   }
 
   public void init() {
@@ -59,6 +56,9 @@ public class Main implements Runnable {
 
   private void update() {
     displayRayCast2D.updateDisplay();
+
+    // No need to call player.movePlayer() here as it's likely handled elsewhere
+    rayCastingSystem.update();
   }
 
   private void render() {
@@ -70,7 +70,9 @@ public class Main implements Runnable {
     mapSectors.mapPoints();
     mapSectors.drawMapSectors();
 
-    raysDraw.drawRays();
+    player.movePlayer();
+    player.drawPlayer();
+    rayCastingSystem.render();
 
     displayRayCast2D.swapBuffers(); 
 
