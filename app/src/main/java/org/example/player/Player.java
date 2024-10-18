@@ -37,7 +37,6 @@ public class Player {
   }
 
   public void movePlayer() {
-    drawPlayer();
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_W)) { 
       playerPositionY += playerDeltaY*0.7;
       playerPositionX += playerDeltaX*0.7;
