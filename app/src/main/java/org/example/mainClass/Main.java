@@ -2,7 +2,7 @@ package org.example.mainClass;
 
 import org.example.map.MapSectors;
 import org.example.player.Player;
-import org.example.renderEngine.DisplayMananger;
+import org.example.displayConfig.DisplayMananger;
 import org.example.renderEngine.Inputs;
 import org.example.renderEngine.RayCastingSystem;
 import org.lwjgl.glfw.GLFW;

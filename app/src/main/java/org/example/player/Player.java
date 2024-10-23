@@ -2,7 +2,7 @@ package org.example.player;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import org.example.renderEngine.DisplayMananger;
+import org.example.displayConfig.DisplayMananger;
 import org.example.renderEngine.Inputs;
 import org.lwjgl.glfw.GLFW;
 

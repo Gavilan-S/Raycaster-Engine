@@ -2,7 +2,7 @@ package org.example.map;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import org.example.renderEngine.DisplayMananger;
+import org.example.displayConfig.DisplayMananger;
 
 public class MapSectors {
   private DisplayMananger display = new DisplayMananger();

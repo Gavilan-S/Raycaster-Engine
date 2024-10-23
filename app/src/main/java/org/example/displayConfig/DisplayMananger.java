@@ -1,5 +1,6 @@
-package org.example.renderEngine;
+package org.example.displayConfig;
 
+import org.example.renderEngine.Inputs;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
