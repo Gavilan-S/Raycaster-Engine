@@ -11,6 +11,8 @@ public class RayCast {
   private Player player;
   private MapSectors map;
   private ViewPlayerConfiguration viewPlayerConfig;
+  
+  private float horizontalVerticalSteps = 50.0f;
 
   public RayCast(Player player, MapSectors map, ViewPlayerConfiguration viewConfig) {
     this.player = player;
@@ -48,9 +50,9 @@ public class RayCast {
 
     // player looking y up 
     if (rayAngle < 180 && rayAngle > 0) {
-      for (float rayMoveY = (float) rayStartY; rayMoveY < rayEndY; rayMoveY += 50) {
-        if (rayMoveY % 50 != 0) {
-          rayMoveY = (float)Math.ceil(rayMoveY/50.0f)*50;
+      for (float rayMoveY = (float) rayStartY; rayMoveY < rayEndY; rayMoveY += horizontalVerticalSteps) {
+        if (rayMoveY % horizontalVerticalSteps != 0) {
+          rayMoveY = (float)Math.ceil(rayMoveY/ horizontalVerticalSteps) * horizontalVerticalSteps;
         }
         // x move to draw
         float rayDeltaX = (float)(rayMoveY - rayStartY) /
@@ -66,9 +68,9 @@ public class RayCast {
     }
     // player looking y down
     else if (rayAngle > 180 && rayAngle < 360) {
-      for (float rayMoveY = (float) rayStartY; rayMoveY > rayEndY; rayMoveY -= 50) {
-        if (rayMoveY % 50 != 0) {
-          rayMoveY = (float)Math.floor(rayMoveY/50.0f)*50;
+      for (float rayMoveY = (float) rayStartY; rayMoveY > rayEndY; rayMoveY -= horizontalVerticalSteps) {
+        if (rayMoveY % horizontalVerticalSteps != 0) {
+          rayMoveY = (float)Math.floor(rayMoveY / horizontalVerticalSteps) * horizontalVerticalSteps;
         }
 
         // x move to draw
@@ -115,9 +117,9 @@ public class RayCast {
 
     // player looking right (angle near 0)
     if (rayAngle < 90 || rayAngle > 270) {
-      for (float rayMoveX = (float) rayStartX; rayMoveX < rayEndX; rayMoveX += 50) {
-        if (rayMoveX % 50 != 0) {
-          rayMoveX = (float)Math.ceil(rayMoveX / 50.0f) * 50;
+      for (float rayMoveX = (float) rayStartX; rayMoveX < rayEndX; rayMoveX += horizontalVerticalSteps) {
+        if (rayMoveX % horizontalVerticalSteps != 0) {
+          rayMoveX = (float)Math.ceil(rayMoveX / horizontalVerticalSteps) * horizontalVerticalSteps;
         }
         // y move to draw
         float rayDeltaY = (float) (rayMoveX - rayStartX) * (float) Math.tan(Math.toRadians(rayAngle));
@@ -132,9 +134,9 @@ public class RayCast {
     }
     // player looking left (angle between 90 and 270)
     else if (rayAngle > 90 && rayAngle < 270) {
-      for (float rayMoveX = (float) rayStartX; rayMoveX > rayEndX; rayMoveX -= 50) {
+      for (float rayMoveX = (float) rayStartX; rayMoveX > rayEndX; rayMoveX -= horizontalVerticalSteps) {
         if (rayMoveX % 50 != 0) {
-          rayMoveX = (float)Math.floor(rayMoveX / 50.0f) * 50;
+          rayMoveX = (float)Math.floor(rayMoveX / horizontalVerticalSteps) * horizontalVerticalSteps;
         }
         // y move to draw
         float rayDeltaY = (float) (rayMoveX - rayStartX) * (float) Math.tan(Math.toRadians(rayAngle));

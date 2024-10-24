@@ -2,12 +2,12 @@ package org.example.player;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import org.example.displayConfig.DisplayMananger;
+import org.example.displayConfig.DisplayManager;
 import org.example.renderEngine.Inputs;
 import org.lwjgl.glfw.GLFW;
 
 public class Player {
-  private DisplayMananger display = new DisplayMananger(); 
+  private DisplayManager display = new DisplayManager(); 
 
   private float playerMouseX= (float) Inputs.getMouseX();
   private float playerAngle;
@@ -58,8 +58,8 @@ public class Player {
     }
 
     // do not get out of the screen
-    playerPositionX = Math.max(0, Math.min(playerPositionX, display.getWidth())); 
-    playerPositionY = Math.max(0, Math.min(playerPositionY, display.getHeight()));
+    playerPositionX = Math.max(0, Math.min(playerPositionX, display.getDisplayWidth())); 
+    playerPositionY = Math.max(0, Math.min(playerPositionY, display.getDisplayHeight()));
 
     // player vision move
     if (Inputs.getCursorMoved()) {

@@ -2,10 +2,10 @@ package org.example.map;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import org.example.displayConfig.DisplayMananger;
+import org.example.displayConfig.DisplayManager;
 
 public class MapSectors {
-  private DisplayMananger display = new DisplayMananger();
+  private DisplayManager display = new DisplayManager();
   
   // sectors: <id> <index> <nWalls> <floor> <ceiling>
   private double[] sectors = {
@@ -82,8 +82,8 @@ public class MapSectors {
     glColor3f(1, 1, 1);
     glPointSize(2);
     glBegin(GL_POINTS);
-    for (int x = 0; x < display.getWidth(); x += 100) { 
-      for (int y = 0; y < display.getHeight(); y += 100) { 
+    for (int x = 0; x < display.getDisplayWidth(); x += 100) { 
+      for (int y = 0; y < display.getDisplayHeight(); y += 100) { 
         glVertex2i(x, y); 
       }
     }
@@ -92,8 +92,8 @@ public class MapSectors {
     glColor3f(0.7f, 0.7f, 0.7f);
     glPointSize(1);
     glBegin(GL_POINTS);
-    for (int x = 0; x < display.getWidth(); x += 100) { 
-      for (int y = 50; y < display.getHeight(); y += 100) { 
+    for (int x = 0; x < display.getDisplayWidth(); x += 100) { 
+      for (int y = 50; y < display.getDisplayHeight(); y += 100) { 
         glVertex2i(x, y); 
       }
     }
