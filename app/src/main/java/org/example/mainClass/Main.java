@@ -2,7 +2,6 @@ package org.example.mainClass;
 
 import org.example.map.Map;
 import org.example.map.MapRender;
-import org.example.map.MapSectors;
 import org.example.player.Player;
 import org.example.displayConfig.DisplayManager;
 import org.example.renderEngine.Inputs;
@@ -16,7 +15,6 @@ import org.lwjgl.opengl.GL11;
 public class Main implements Runnable {
   private DisplayManager displayRayCast2D;
   private Player player;
-  private MapSectors mapSectors;
   private RayCastingSystem rayCastingSystem;
 
 	private Map map;
@@ -37,8 +35,7 @@ public class Main implements Runnable {
 		mapRender = new MapRender(map, 100);
 
     this.player = new Player();
-    this.mapSectors = new MapSectors();
-    this.rayCastingSystem = new RayCastingSystem(player, mapSectors);
+    this.rayCastingSystem = new RayCastingSystem(player, map);
   }
 
   public void init() {

@@ -29,24 +29,6 @@ public class MapRender {
 		}
 	}
 
-	private void drawGrid() {
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBegin(GL_LINES);
-		glColor4f(1.0f, 1.0f, 1.0f, 0.1f);
-
-		for (float gridX = 0; gridX <= display.getDisplayWidth(); gridX += scale) {
-			glVertex2f(gridX, 0);
-			glVertex2f(gridX, display.getDisplayHeight());
-		}
-
-		for (float gridY = 0; gridY <= display.getDisplayHeight(); gridY += scale) {
-			glVertex2f(0, gridY);
-			glVertex2f(display.getDisplayWidth(), gridY);
-		}
-		glEnd();
-	}
-
 	private void drawSector(Sector sector) {
 		for (Wall wall : sector.getWalls()) {
 			drawWall(wall);
@@ -65,4 +47,24 @@ public class MapRender {
 		glVertex2d(wall.getWallX1() * scale, wall.getWallY1() * scale);
 		glEnd();
 	}
+
+	private void drawGrid() {
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBegin(GL_LINES);
+		glColor4f(1.0f, 1.0f, 1.0f, 0.1f);
+
+		for (float gridX = 0; gridX <= display.getDisplayWidth(); gridX += scale) {
+			glVertex2f(gridX, 0);
+			glVertex2f(gridX, display.getDisplayHeight());
+		}
+
+		for (float gridY = 0; gridY <= display.getDisplayHeight(); gridY += scale) {
+			glVertex2f(0, gridY);
+			glVertex2f(display.getDisplayWidth(), gridY);
+		}
+		glEnd();
+	}
+
+  public float getScale() { return scale; }
 }
