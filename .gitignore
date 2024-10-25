@@ -8,7 +8,7 @@ package.json
 
 # Ignore Gradle project-specific cache directory
 .gradle
-/bin/
+app/bin/*
 
 # Ignore Gradle build output directory
 build
