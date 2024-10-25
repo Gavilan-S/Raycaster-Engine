@@ -1,8 +1,9 @@
 package org.example.mainClass;
 
-import org.example.map.MapSectors;
+import org.example.map.Map;
+import org.example.map.MapRender;
 import org.example.player.Player;
-import org.example.renderEngine.DisplayMananger;
+import org.example.displayConfig.DisplayManager;
 import org.example.renderEngine.Inputs;
 import org.example.renderEngine.RayCastingSystem;
 import org.lwjgl.glfw.GLFW;
@@ -12,10 +13,13 @@ import org.lwjgl.opengl.GL11;
 // basic stuff: start (for thread), init (create window) <- run <- (init, update, render)
 
 public class Main implements Runnable {
-  private DisplayMananger displayRayCast2D;
+  private DisplayManager displayRayCast2D;
   private Player player;
-  private MapSectors mapSectors;
   private RayCastingSystem rayCastingSystem;
+
+	private Map map;
+	private MapRender mapRender;
+
 
   // Thread help us to run the same code at the same time
   public Thread threadOne;
@@ -27,15 +31,17 @@ public class Main implements Runnable {
     threadOne = new Thread(this, "first thread");
     threadOne.start();
 
+		this.map = new Map();
+		mapRender = new MapRender(map, 100);
+
     this.player = new Player();
-    this.mapSectors = new MapSectors();
-    this.rayCastingSystem = new RayCastingSystem(player, mapSectors);
+    this.rayCastingSystem = new RayCastingSystem(player, map);
   }
 
   public void init() {
     System.out.println("init new game");
     // crate the window with DisplayMananger class
-    displayRayCast2D = new DisplayMananger();
+    displayRayCast2D = new DisplayManager();
     displayRayCast2D.createDisplay();
 
 
@@ -67,8 +73,7 @@ public class Main implements Runnable {
     GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-    mapSectors.mapPoints();
-    mapSectors.drawMapSectors();
+		mapRender.render();
 
     player.movePlayer();
     player.drawPlayer();

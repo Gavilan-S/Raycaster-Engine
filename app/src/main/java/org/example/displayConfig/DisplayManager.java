@@ -1,11 +1,12 @@
-package org.example.renderEngine;
+package org.example.displayConfig;
 
+import org.example.renderEngine.Inputs;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
-public class DisplayMananger {
+public class DisplayManager {
   private int width = 1024, height = 680;
   private String title = "RayCast2D";
   private long display;
@@ -18,7 +19,7 @@ public class DisplayMananger {
   public static float backgroundRed, backgroundGreen, backgroundBlue;
 
 
-  public DisplayMananger() {
+  public DisplayManager() {
     this.width = width;
     this.height = height;
     this.title = title;
@@ -127,7 +128,7 @@ public class DisplayMananger {
   }
 
   public long getDisplay() { return display; }
-  public int getWidth() { return width; }
-  public int getHeight() { return height; }
-  public String getTitle() { return title; }
+  public int getDisplayWidth() { return width; }
+  public int getDisplayHeight() { return height; }
+  public String getDisplayTitle() { return title; }
 }
