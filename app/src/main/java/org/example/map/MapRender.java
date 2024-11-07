@@ -2,21 +2,18 @@ package org.example.map;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import org.example.displayConfig.DisplayManager;
+import org.example.mainClass.Main;
 
 public class MapRender {
 	private Map map;
 	private float scale;
 	private boolean showGrid;
 
-	private DisplayManager display;
 
 	public MapRender(Map map, float scale) {
 		this.map = map;
 		this.scale = scale;
 		this.showGrid = true;
-
-		this.display = new DisplayManager();
 	}
 
 	public void render() {
@@ -54,14 +51,14 @@ public class MapRender {
 		glBegin(GL_LINES);
 		glColor4f(1.0f, 1.0f, 1.0f, 0.1f);
 
-		for (float gridX = 0; gridX <= display.getDisplayWidth(); gridX += scale) {
+		for (float gridX = 0; gridX <= Main.getRayCast2dDisplayWidth(); gridX += scale) {
 			glVertex2f(gridX, 0);
-			glVertex2f(gridX, display.getDisplayHeight());
+			glVertex2f(gridX, Main.getRayCast2dDisplayHeight());
 		}
 
-		for (float gridY = 0; gridY <= display.getDisplayHeight(); gridY += scale) {
+		for (float gridY = 0; gridY <= Main.getRayCast2dDisplayHeight(); gridY += scale) {
 			glVertex2f(0, gridY);
-			glVertex2f(display.getDisplayWidth(), gridY);
+			glVertex2f(Main.getRayCast2dDisplayWidth(), gridY);
 		}
 		glEnd();
 	}

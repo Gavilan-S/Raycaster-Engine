@@ -10,17 +10,16 @@ public class DisplayManager {
   private int displayWidth = 1024, displayHeight = 680;
   private String displayTitle = "RayCast2D";
   private long display;
-  public static float backgroundRed, backgroundGreen, backgroundBlue;
 
   public int frames;
   public static long time;
 
   public Inputs inputs;
 
-  public DisplayManager() {
-    this.displayWidth = displayWidth;
-    this.displayHeight= displayHeight;
-    this.displayTitle= displayTitle;
+  public DisplayManager(int width, int height, String title) {
+    this.displayWidth = width;
+    this.displayHeight = height;
+    this.displayTitle = title;
   }
 
   public void createDisplay() {
@@ -39,7 +38,7 @@ public class DisplayManager {
 
     // display is a long
     if (display == 0) {
-      System.err.println("Window: could not be created");
+      System.err.println("displaycould not be created");
       System.exit(-1);
     }
 
@@ -51,8 +50,6 @@ public class DisplayManager {
     GLFW.glfwSetWindowPos(display, (vidMode.width() - displayWidth) / 2,  (vidMode.height() - displayHeight) / 2);
     GLFW.glfwMakeContextCurrent(display);
 
-    // garantiza que tu aplicación sepa qué funcionalidades están disponibles en el entorno de ejecución actual
-    GL.createCapabilities();
 
     // use the getter of the keyboard, mouseMove and mouseButtons
     GLFW.glfwSetKeyCallback(display, inputs.getKeyboardCallBack());
@@ -64,6 +61,7 @@ public class DisplayManager {
 
     // frame rate: 1 = 60 fps
     GLFW.glfwSwapInterval(1);
+
     // get the time
     time = System.currentTimeMillis();
 
@@ -95,16 +93,8 @@ public class DisplayManager {
     GLFW.glfwTerminate();
   }
 
-//   public void setBackgroundColor(float red, float green, float blue) {
-//     backgroundRed = red;
-//     backgroundGreen = green;
-//     backgroundBlue = blue;
-//   }
-
-
   public void updateDisplay() {
     // color on screeen (0.0 to 1.0. GlCrear use GlCrearColor to set the color
-    GL11.glClearColor(backgroundRed, backgroundGreen, backgroundBlue, 1.0f);
     GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
     // interración user/window
@@ -122,11 +112,7 @@ public class DisplayManager {
   public void swapBuffers() {
     // el contenido del buffer oculto se intercambia con el buffer visible, imagen más suave
     GLFW.glfwSwapBuffers(display);
-
   }
 
   public long getDisplay() { return display; }
-  public int getDisplayWidth() { return displayWidth; }
-  public int getDisplayHeight() { return displayHeight; }
-  public String getDisplayTitle() { return displayTitle; }
 }
