@@ -1,9 +1,7 @@
 package org.example.renderEngine;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.example.map.Map;
 import org.example.map.Sector;
@@ -18,14 +16,11 @@ public class RayCast {
   
   private float scale = 100;
   private float horizontalVerticalSteps = 50.0f;
-	private Set<Integer> visitedSectors;
 
   public RayCast(Player player, Map map, ViewPlayerConfiguration viewConfig) {
     this.player = player;
     this.viewPlayerConfig = viewConfig;
 		this.map = map;
-
-		this.visitedSectors = new HashSet<>();
   }
 
   public List<Ray> castRays() {

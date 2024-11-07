@@ -7,22 +7,20 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
 public class DisplayManager {
-  private int width = 1024, height = 680;
-  private String title = "RayCast2D";
+  private int displayWidth = 1024, displayHeight = 680;
+  private String displayTitle = "RayCast2D";
   private long display;
+  public static float backgroundRed, backgroundGreen, backgroundBlue;
 
   public int frames;
   public static long time;
 
   public Inputs inputs;
-  
-  public static float backgroundRed, backgroundGreen, backgroundBlue;
-
 
   public DisplayManager() {
-    this.width = width;
-    this.height = height;
-    this.title = title;
+    this.displayWidth = displayWidth;
+    this.displayHeight= displayHeight;
+    this.displayTitle= displayTitle;
   }
 
   public void createDisplay() {
@@ -37,7 +35,7 @@ public class DisplayManager {
     GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_FALSE);
 
     // args4: fullscreen or other. args5: multiple monitors
-    display = GLFW.glfwCreateWindow(width, height, title, 0, 0);
+    display = GLFW.glfwCreateWindow(displayWidth, displayHeight, displayTitle, 0, 0);
 
     // display is a long
     if (display == 0) {
@@ -50,7 +48,7 @@ public class DisplayManager {
     // 2: set position
     // 3: (set SwapInterval) at this moment all the render operations will be aplied to the window
     GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
-    GLFW.glfwSetWindowPos(display, (vidMode.width() - width) / 2,  (vidMode.height() - height) / 2);
+    GLFW.glfwSetWindowPos(display, (vidMode.width() - displayWidth) / 2,  (vidMode.height() - displayHeight) / 2);
     GLFW.glfwMakeContextCurrent(display);
 
     // garantiza que tu aplicación sepa qué funcionalidades están disponibles en el entorno de ejecución actual
@@ -73,14 +71,14 @@ public class DisplayManager {
     GL.createCapabilities();
 
     // draw cords 
-    GL11.glViewport(0, 0, width, height);
+    GL11.glViewport(0, 0, displayWidth, displayHeight);
 
     // 1. how to proyect cords
     // 2. new []
     // 3. change 0,0
     GL11.glMatrixMode(GL11.GL_PROJECTION);
     GL11.glLoadIdentity();
-    GL11.glOrtho(0, width, 0, height, -1, 1); // Invertir el eje Y para que (0,0) esté en la esquina inferior izquierda
+    GL11.glOrtho(0, displayWidth, 0, displayHeight, -1, 1); // Invertir el eje Y para que (0,0) esté en la esquina inferior izquierda
 
   }
 
@@ -97,11 +95,11 @@ public class DisplayManager {
     GLFW.glfwTerminate();
   }
 
-  public void setBackgroundColor(float red, float green, float blue) {
-    backgroundRed = red;
-    backgroundGreen = green;
-    backgroundBlue = blue;
-  }
+//   public void setBackgroundColor(float red, float green, float blue) {
+//     backgroundRed = red;
+//     backgroundGreen = green;
+//     backgroundBlue = blue;
+//   }
 
 
   public void updateDisplay() {
@@ -115,7 +113,7 @@ public class DisplayManager {
     // start to add frames and if there is more tham 1000 millis print frames
     frames++;
     if (System.currentTimeMillis() > time + 1000) {
-      GLFW.glfwSetWindowTitle(display, title + " | FPS: " + frames);
+      GLFW.glfwSetWindowTitle(display, displayTitle + " | FPS: " + frames);
       time = System.currentTimeMillis();
       frames = 0;
     }
@@ -128,7 +126,7 @@ public class DisplayManager {
   }
 
   public long getDisplay() { return display; }
-  public int getDisplayWidth() { return width; }
-  public int getDisplayHeight() { return height; }
-  public String getDisplayTitle() { return title; }
+  public int getDisplayWidth() { return displayWidth; }
+  public int getDisplayHeight() { return displayHeight; }
+  public String getDisplayTitle() { return displayTitle; }
 }
