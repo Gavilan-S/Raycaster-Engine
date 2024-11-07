@@ -93,7 +93,8 @@ public class RayCast {
 				if (rayMoveForCheckX == wall.getWallX0()*scale &&
 				wall.getWallX0() * scale == wall.getWallX1()*scale &&
 				rayMoveForCheckY >= Math.min(wall.getWallY0()*scale, wall.getWallY1()*scale) &&
-				rayMoveForCheckY <= Math.max(wall.getWallY0()*scale, wall.getWallY1()*scale)) {
+				rayMoveForCheckY <= Math.max(wall.getWallY0()*scale, wall.getWallY1()*scale) &&
+        wall.getConnectedSector() == -1) {
 					float rayDistance = distanceToPoint(rayMoveForCheckX, rayMoveForCheckY, rayStartForCheckX, rayStartForCheckY);
 					if (rayDistance < nearestDistanceForCheck) {
 						nearestDistanceForCheck = rayDistance;
@@ -146,7 +147,8 @@ public class RayCast {
   private boolean checkWallCollision(double rayMoveX, double rayMoveY, Wall wall, float tolerance){
     return rayMoveX >= Math.min(wall.getWallX0()*scale, wall.getWallX1()*scale)- tolerance  &&
            rayMoveX <= Math.max(wall.getWallX0()*scale, wall.getWallX1()*scale)+ tolerance &&
-           rayMoveY >= Math.min(wall.getWallY0()*scale, wall.getWallY1()*scale)- tolerance &&
+           rayMoveY >= Math.min(wall.getWallY0()*scale, wall.getWallY1()*scale)- tolerance && 
+           wall.getConnectedSector() == -1 &&
            rayMoveY <= Math.max(wall.getWallY0()*scale, wall.getWallY1()*scale)+ tolerance ||
            distanceToPoint(rayMoveX, rayMoveY, wall.getWallX0()*scale, wall.getWallY0()*scale) <= tolerance ||
            distanceToPoint(rayMoveX, rayMoveY, wall.getWallX1()*scale, wall.getWallY1()*scale) <= tolerance;
