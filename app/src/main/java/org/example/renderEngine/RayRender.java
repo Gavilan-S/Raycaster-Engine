@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import java.util.List;
 
 import org.example.mainClass.Main;
+import org.example.map.MapRender;
 
 public class RayRender {
   public void renderRays(List<Ray> rays) {
@@ -18,14 +19,15 @@ public class RayRender {
     }
   }
 
-  public void render3DWalls(List<Ray> rays, double wallHeightConstant) {
+  public void render3DWalls(List<Ray> rays) {
+
     int numRays = rays.size();
     double columnWidth = (double) Main.getGameDisplayWidth() / numRays;
 
     for (int i = 0; i < numRays; i++) {
       Ray ray = rays.get(i);
 
-      double wallHeight = (wallHeightConstant * Main.getGameDisplayHeight()) / ray.getRayDistance();
+      double wallHeight = (MapRender.getScale() * Main.getGameDisplayHeight()) / ray.getRayDistance();
       int wallTop = (int) (Main.getGameDisplayHeight() / 2 - wallHeight / 2);
       int wallBottom = (int) (Main.getGameDisplayHeight() / 2 + wallHeight / 2);
       int columnX = (int) (i * columnWidth);

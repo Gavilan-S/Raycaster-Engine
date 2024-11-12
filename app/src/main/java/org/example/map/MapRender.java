@@ -6,13 +6,12 @@ import org.example.mainClass.Main;
 
 public class MapRender {
 	private Map map;
-	private float scale;
+	private static float scale = 100;
 	private boolean showGrid;
 
 
-	public MapRender(Map map, float scale) {
+	public MapRender(Map map) {
 		this.map = map;
-		this.scale = scale;
 		this.showGrid = true;
 	}
 
@@ -63,5 +62,5 @@ public class MapRender {
 		glEnd();
 	}
 
-  public float getScale() { return scale; }
+  public static float getScale() { return scale; }
 }

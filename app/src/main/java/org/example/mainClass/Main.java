@@ -39,7 +39,7 @@ public class Main implements Runnable {
     threadOne.start();
 
 		this.map = new Map();
-		mapRender = new MapRender(map, 100);
+		mapRender = new MapRender(map);
 
     this.player = new Player();
     this.rayCastingSystem = new RayCastingSystem(player, map);

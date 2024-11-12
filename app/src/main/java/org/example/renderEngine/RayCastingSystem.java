@@ -34,7 +34,7 @@ public class RayCastingSystem {
   }
 
   public void renderTest() {
-    rayRender.render3DWalls(currentRays, 100);
+    rayRender.render3DWalls(currentRays);
   }
 }
 
