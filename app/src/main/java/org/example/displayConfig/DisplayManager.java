@@ -7,22 +7,19 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
 public class DisplayManager {
-  private int width = 1024, height = 680;
-  private String title = "RayCast2D";
+  private int displayWidth = 1024, displayHeight = 680;
+  private String displayTitle = "RayCast2D";
   private long display;
 
   public int frames;
   public static long time;
 
   public Inputs inputs;
-  
-  public static float backgroundRed, backgroundGreen, backgroundBlue;
 
-
-  public DisplayManager() {
-    this.width = width;
-    this.height = height;
-    this.title = title;
+  public DisplayManager(int width, int height, String title) {
+    this.displayWidth = width;
+    this.displayHeight = height;
+    this.displayTitle = title;
   }
 
   public void createDisplay() {
@@ -37,11 +34,11 @@ public class DisplayManager {
     GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_FALSE);
 
     // args4: fullscreen or other. args5: multiple monitors
-    display = GLFW.glfwCreateWindow(width, height, title, 0, 0);
+    display = GLFW.glfwCreateWindow(displayWidth, displayHeight, displayTitle, 0, 0);
 
     // display is a long
     if (display == 0) {
-      System.err.println("Window: could not be created");
+      System.err.println("displaycould not be created");
       System.exit(-1);
     }
 
@@ -50,11 +47,9 @@ public class DisplayManager {
     // 2: set position
     // 3: (set SwapInterval) at this moment all the render operations will be aplied to the window
     GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
-    GLFW.glfwSetWindowPos(display, (vidMode.width() - width) / 2,  (vidMode.height() - height) / 2);
+    GLFW.glfwSetWindowPos(display, (vidMode.width() - displayWidth) / 2,  (vidMode.height() - displayHeight) / 2);
     GLFW.glfwMakeContextCurrent(display);
 
-    // garantiza que tu aplicación sepa qué funcionalidades están disponibles en el entorno de ejecución actual
-    GL.createCapabilities();
 
     // use the getter of the keyboard, mouseMove and mouseButtons
     GLFW.glfwSetKeyCallback(display, inputs.getKeyboardCallBack());
@@ -66,6 +61,7 @@ public class DisplayManager {
 
     // frame rate: 1 = 60 fps
     GLFW.glfwSwapInterval(1);
+
     // get the time
     time = System.currentTimeMillis();
 
@@ -73,14 +69,14 @@ public class DisplayManager {
     GL.createCapabilities();
 
     // draw cords 
-    GL11.glViewport(0, 0, width, height);
+    GL11.glViewport(0, 0, displayWidth, displayHeight);
 
     // 1. how to proyect cords
     // 2. new []
     // 3. change 0,0
     GL11.glMatrixMode(GL11.GL_PROJECTION);
     GL11.glLoadIdentity();
-    GL11.glOrtho(0, width, 0, height, -1, 1); // Invertir el eje Y para que (0,0) esté en la esquina inferior izquierda
+    GL11.glOrtho(0, displayWidth, 0, displayHeight, -1, 1); // Invertir el eje Y para que (0,0) esté en la esquina inferior izquierda
 
   }
 
@@ -97,16 +93,8 @@ public class DisplayManager {
     GLFW.glfwTerminate();
   }
 
-  public void setBackgroundColor(float red, float green, float blue) {
-    backgroundRed = red;
-    backgroundGreen = green;
-    backgroundBlue = blue;
-  }
-
-
   public void updateDisplay() {
     // color on screeen (0.0 to 1.0. GlCrear use GlCrearColor to set the color
-    GL11.glClearColor(backgroundRed, backgroundGreen, backgroundBlue, 1.0f);
     GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
     // interración user/window
@@ -115,7 +103,7 @@ public class DisplayManager {
     // start to add frames and if there is more tham 1000 millis print frames
     frames++;
     if (System.currentTimeMillis() > time + 1000) {
-      GLFW.glfwSetWindowTitle(display, title + " | FPS: " + frames);
+      GLFW.glfwSetWindowTitle(display, displayTitle + " | FPS: " + frames);
       time = System.currentTimeMillis();
       frames = 0;
     }
@@ -124,11 +112,7 @@ public class DisplayManager {
   public void swapBuffers() {
     // el contenido del buffer oculto se intercambia con el buffer visible, imagen más suave
     GLFW.glfwSwapBuffers(display);
-
   }
 
   public long getDisplay() { return display; }
-  public int getDisplayWidth() { return width; }
-  public int getDisplayHeight() { return height; }
-  public String getDisplayTitle() { return title; }
 }

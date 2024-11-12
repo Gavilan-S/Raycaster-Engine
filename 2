@@ -1,0 +1,42 @@
+package org.example.renderEngine;
+
+import static org.lwjgl.opengl.GL11.*;
+
+import java.util.List;
+
+public class RayRender {
+  public void renderRays(List<Ray> rays) {
+    for (Ray ray : rays) {
+      glColor3f(1.0f, 1.0f, 1.0f);
+      glLineWidth(1);
+      glBegin(GL_LINES);
+      glVertex2d(ray.getRayStartX(), ray.getRayStartY());
+      glVertex2d(ray.getRayEndX(), ray.getRayEndY());
+      glEnd();
+    }
+  }
+
+  public void render3DWalls(List<Ray> rays, int screenWidth, int screenHeight, double wallHeightConstant) {
+    for (Ray ray : rays) {
+
+      double distanciaAlaPared = ray.getRayDistance();
+
+      // Calcular la altura proyectada en pantalla en función de la distancia
+      double alturaProyectada = (wallHeightConstant * screenHeight) / distanciaAlaPared;
+
+      // Calcular las coordenadas para dibujar la pared en pantalla
+      int wallTop = (int) (screenHeight / 2 - alturaProyectada / 2);
+      int wallBottom = (int) (screenHeight / 2 + alturaProyectada / 2);
+
+      // Configurar el color de la pared (puedes añadir un sombreado según la distancia si quieres)
+      float colorFactor = (float) Math.max(0.2, 1.0 - (distanciaAlaPared / 10.0)); // Desvanece con la distancia
+      glColor3f(colorFactor, colorFactor * 0.5f, colorFactor * 0.3f);
+
+      // Dibujar la pared como una línea vertical en la posición x de la pantalla
+      glBegin(GL_LINES);
+      glVertex2i(x, wallTop);
+      glVertex2i(x, wallBottom);
+      glEnd();
+    }
+  }
+}
