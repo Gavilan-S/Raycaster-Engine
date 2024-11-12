@@ -46,13 +46,13 @@ public class Player {
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_D)) { 
-      playerPositionY -= Math.cos(Math.toRadians(playerAngle))*3; 
-      playerPositionX += Math.sin(Math.toRadians(playerAngle))*3;
+      playerPositionY += Math.cos(Math.toRadians(playerAngle))*3; 
+      playerPositionX -= Math.sin(Math.toRadians(playerAngle))*3;
     }
 
     if (Inputs.isKeyDown(GLFW.GLFW_KEY_A)) { 
-      playerPositionY += Math.cos(Math.toRadians(playerAngle))*3; 
-      playerPositionX -= Math.sin(Math.toRadians(playerAngle))*3;
+      playerPositionY -= Math.cos(Math.toRadians(playerAngle))*3; 
+      playerPositionX += Math.sin(Math.toRadians(playerAngle))*3;
     }
 
     // do not get out of the screen
