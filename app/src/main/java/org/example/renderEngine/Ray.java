@@ -29,4 +29,6 @@ public class Ray {
 	public double getRayEndX() { return rayEndX; }
 	public double getRayAngle() { return rayAngle; }
 	public float getRayDistance() { return rayDistance; }
+
+  public void setRayDistance(float actualRayDistance) { this.rayDistance = actualRayDistance; }
 }

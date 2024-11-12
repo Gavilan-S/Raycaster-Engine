@@ -18,7 +18,7 @@ public class RayCastingSystem {
   public RayCastingSystem(Player player, Map map) {
     this.player = player;
     this.map = map;
-    this.viewPlayerConfig = new ViewPlayerConfiguration(100, 60.0f);
+    this.viewPlayerConfig = new ViewPlayerConfiguration(1, 60.0f);
     this.rayCast = new RayCast(player, map, viewPlayerConfig);
     this.rayRender = new RayRender();
     this.currentRays = new ArrayList<>();
@@ -31,10 +31,7 @@ public class RayCastingSystem {
 
   public void render() {
     rayRender.renderRays(currentRays);
-  }
-
-  public void renderTest() {
-    rayRender.render3DWalls(currentRays, 100);
+    rayRender.render3DWalls(cucurrentRays, 1800, 800, 1);
   }
 }
 

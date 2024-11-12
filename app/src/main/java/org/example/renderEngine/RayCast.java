@@ -37,11 +37,13 @@ public class RayCast {
     return raysList;
   }
 
-  private void calculateRayCollision(Ray ray) {
+  public float calculateRayCollision(Ray ray) {
     float nearestDistance = Float.MAX_VALUE;
 
     nearestDistance = detectDiagonalHorizontalCollisions(ray, nearestDistance);
     nearestDistance = detectVerticalCollisions(ray, nearestDistance);
+
+    return nearestDistance;
   }
 
   private float detectVerticalCollisions(Ray ray, float nearestDistance) {
@@ -60,11 +62,7 @@ public class RayCast {
         double rayDeltaY = (rayMoveX - rayStartX) * Math.tan(Math.toRadians(rayAngle));
         double rayMoveY = rayStartY + rayDeltaY;
 
-        nearestDistance = checkVerticalCollisions(rayMoveX, rayMoveY, rayStartX, rayStartY, nearestDistance);
-
-        if (nearestDistance == distanceToPoint(rayMoveX, rayMoveY, rayStartX, rayStartY)) {
-          ray.setCollisionPoint(rayMoveX, rayMoveY);
-        }
+        nearestDistance = checkVerticalCollisions(ray, rayMoveX, rayMoveY, rayStartX, rayStartY, nearestDistance);
       }
     }
     // player looking left (angle between 90 and 270)
@@ -76,16 +74,14 @@ public class RayCast {
         // y move to draw
         double rayDeltaY = (rayMoveX - rayStartX) * Math.tan(Math.toRadians(rayAngle));
         double rayMoveY = rayStartY + rayDeltaY;
-        nearestDistance = checkVerticalCollisions(rayMoveX, rayMoveY, rayStartX, rayStartY, nearestDistance);
-        if (nearestDistance == distanceToPoint(rayMoveX, rayMoveY, rayStartX, rayStartY)) {
-          ray.setCollisionPoint(rayMoveX, rayMoveY);
-        }
+
+        nearestDistance = checkVerticalCollisions(ray, rayMoveX, rayMoveY, rayStartX, rayStartY, nearestDistance);
       }
     }
     return nearestDistance;
   }
 
-  public float checkVerticalCollisions(double rayMoveForCheckX, double rayMoveForCheckY,
+  private float checkVerticalCollisions(Ray ray, double rayMoveForCheckX, double rayMoveForCheckY,
                                        double rayStartForCheckX, double rayStartForCheckY,
 																			 float nearestDistanceForCheck) {
 		for (Sector sector : map.getAllSectors()) {
@@ -97,9 +93,11 @@ public class RayCast {
         wall.getConnectedSector() == -1) {
 					float rayDistance = distanceToPoint(rayMoveForCheckX, rayMoveForCheckY, rayStartForCheckX, rayStartForCheckY);
 					if (rayDistance < nearestDistanceForCheck) {
-						nearestDistanceForCheck = rayDistance;
-						return nearestDistanceForCheck;
-					}
+            nearestDistanceForCheck = rayDistance;
+            ray.setRayDistance(nearestDistanceForCheck);
+            ray.setCollisionPoint(rayMoveForCheckX, rayMoveForCheckY);
+            return nearestDistanceForCheck;
+          }
 				}
 			}
 		}
@@ -133,8 +131,9 @@ public class RayCast {
               float rayDistance = distanceToPoint(rayMoveX, rayMoveY, rayStartX, rayStartY);
 
               if (rayDistance < nearestDistance) {
-                ray.setCollisionPoint(rayMoveX, rayMoveY);
                 nearestDistance = rayDistance;
+                ray.setRayDistance(nearestDistance);
+                ray.setCollisionPoint(rayMoveX, rayMoveY);
               } 
             }
           }
